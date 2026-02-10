@@ -1,0 +1,134 @@
+<!-- views/home.hbs -->
+<section class="main-content-area">
+    <header class="content-header">
+        <h1>Catálogo de Productos</h1>
+        <p class="results-count">Mostrando {{productos.length}} productos encontrados</p>
+    </header>
+
+    <div class="product-grid">
+        {{#each productos}}
+            <article class="product-card">
+                  <div class="product-image">
+            {{#if this.foto2 }}
+                <img src="{{this.foto2}}" alt="{{this.nombre}}" loading="lazy">
+            {{else}}
+                <img src="/img/placeholder.jpg" alt="Sin imagen">
+            {{/if}}
+            
+            {{#if this.oferta}}
+                <span class="offer-tag">Oferta</span>
+            {{/if}}
+        </div>
+                <div class="product-badge">
+                    {{this.categoria}}
+                </div>
+                <div class="product-info">
+                    <h3>{{this.titulo}}</h3>
+                     <h2>{{this.des}}</h2>
+                    <p class="price">${{this.precio1}}</p>
+                    
+                    <div class="product-status">
+                        <!--{{#if this.stock}}
+                            <span class="status-in">En Stock ({{this.stock}})</span>
+                        {{else}}
+                            <span class="status-out">Agotado</span>
+                        {{/if}}-->
+                    </div>
+                </div>
+                <footer class="product-footer">
+                    <button class="btn-view">Ver Detalles</button>
+                </footer>
+            </article>
+        {{else}}
+            <div class="no-results">
+                <div class="icon">🔍</div>
+                <h2>No se encontraron resultados</h2>
+                <p>Intenta ajustar los filtros de la barra lateral para encontrar lo que buscas.</p>
+                <a href="/productos" class="btn-clear">Limpiar filtros</a>
+            </div>
+        {{/each}}
+    </div>
+</section>
+
+<style>
+/* Estilos específicos para la vista de productos */
+.content-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 15px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-badge {
+    background: #e0e7ff;
+    color: #4338ca;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    align-self: flex-start;
+    margin-bottom: 15px;
+}
+
+.price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #111827;
+    margin: 10px 0;
+}
+
+.status-in { color: #059669; font-size: 0.9rem; }
+.status-out { color: #dc2626; font-size: 0.9rem; }
+
+.btn-view {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background: #f3f4f6;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-view:hover { background: #e5e7eb; }
+
+/* Estado vacío */
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+    border: 2px dashed #d1d5db;
+}
+
+.no-results .icon { font-size: 50px; margin-bottom: 20px; }
+.btn-clear {
+    display: inline-block;
+    margin-top: 20px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+}
+</style>

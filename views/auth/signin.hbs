@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso - RosalesImports</title>
+    <link href="https://cdn.jsdelivr.net" rel="stylesheet">
+    <script src="https://code.jquery.com"></script>
+
+<body class="bg-light">
+
+    <style>
+        /* 1. Contenedor con margen externo garantizado */
+        .main-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f4f7f6;
+            /* Este padding actúa como el margen exterior del recuadro */
+            padding: 40px 20px;
+        }
+
+        /* 2. Recuadro Grande con margen interno (padding) */
+        .login-card {
+            width: 100%;
+            max-width: 650px;
+            border: 2px solid #0d6efd;
+            border-radius: 20px;
+            background: #ffffff;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            /* Margen de seguridad para que el contenido no toque el borde azul */
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        /* 3. Fuentes pequeñas y estilizadas */
+        .login-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0d6efd;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #555;
+        }
+
+        .form-control-lg {
+            height: 52px;
+            font-size: 0.95rem !important;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+        }
+
+        .btn-lg {
+            height: 52px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        /* Efecto hover para el botón */
+        .btn-lg:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .btn-toggle-eye {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #bbb;
+        }
+    </style>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="main-wrapper">
+    <div class="login-card">
+        <div class="text-center mb-5">
+            <h1 class="login-title mb-1">RosalesImports</h1>
+            <div style="width: 50px; height: 3px; background: #0d6efd; margin: 10px auto;"></div>
+            <p class="small text-muted text-uppercase">Acceso al Sistema</p>
+        </div>
+
+        <form id="formlogin" class="px-md-4" method="post" action="/login">
+            <!-- SE AGREGARON IDS: dni y mdni -->
+            <div class="mb-4">
+                <label class="form-label">Usuario / DNI</label>
+                <input type="text" id="dni" name="dni" class="form-control form-control-lg" placeholder="Ingrese su identificación" autocomplete="off">
+                <input type="hidden" id="mdni">
+            </div>
+
+            <!-- SE AGREGARON IDS: pass y btn-toggle -->
+            <div class="mb-5">
+                <label class="form-label">Contraseña</label>
+                <div class="password-wrapper">
+                    <input type="password" id="pass" name="pass" class="form-control form-control-lg" placeholder="••••••••">
+                    <button type="button" id="btn-toggle" class="btn-toggle-eye">
+                        👁️
+                    </button>
+                </div>
+            </div>
+
+            <button type="button" class="w-100 btn btn-lg btn-primary mb-3" onclick="ingresar()">
+                INGRESAR
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Manejo de alertas del servidor
+        if ("{{alert}}" === "true") {
+            Swal.fire({ icon: 'error', title: 'USUARIO INCORRECTO', timer: 5000, showConfirmButton: false });
+        }
+
+        // Formateo de DNI
+        $("#dni").on("keyup", function () {
+            let val = $(this).val().replace(/\D/g, "");
+            $("#mdni").val(val); // Guarda el valor limpio para el servidor
+            $(this).val(val.replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        });
+
+        // Toggle de contraseña
+        $('#btn-toggle').on('click', function () {
+            const input = $('#pass');
+            const isPass = input.attr('type') === 'password';
+            input.attr('type', isPass ? 'text' : 'password');
+            $(this).text(isPass ? '🙈' : '👁️');
+        });
+    });
+
+    function ingresar() {
+        // Ahora sí encuentra los IDs
+        if ($("#mdni").val().length === 0) {
+            Swal.fire({ icon: 'error', title: 'DNI Requerido', timer: 1500, showConfirmButton: false });
+            $("#dni").focus();
+            return;
+        }
+        if ($("#pass").val().length === 0) {
+            Swal.fire({ icon: 'error', title: 'Contraseña Requerida', timer: 1500, showConfirmButton: false });
+            $("#pass").focus();
+            return;
+        }
+        console.log("Formulario válido, enviando...");
+        document.getElementById("formlogin").submit();
+    }
+</script>
+</body>
+
+</html>

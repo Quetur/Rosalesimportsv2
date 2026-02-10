@@ -1,0 +1,711 @@
+<body>
+  <main>
+    <div class="container">
+
+      <h2 class="d-flex justify-content-center mb-3">Realizar Pedido</h2>
+
+      <form id="procesar-datos" action="/send-email" method="POST" style="font-size:24px">
+        <table border=0 class="col-12 col-md-12">
+          <tr>
+            <td style="width:15%;">
+              <label for="cliente" class="col-12 col-md-2 col-form-label h2">Nombre:</label>
+            </td>
+
+            <td style="width:35%;">
+
+              <input style="font-size:24px" type="text" class="form-control" id="cliente"
+                placeholder="Ingresa tu Nombre" name="cliente" required>
+
+            </td>
+            <td style="width:15%;">
+              <label for="email" class="col-12 col-md-2 col-form-label h2">Celular:</label>
+            </td>
+            <td style="width:35%;">
+              <input style="font-size:24px" type="cel" class="form-control" id="cel" placeholder="celular sin 15"
+                name="cel" required>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="width:15%;">
+              <label class="col-12 col-md-2 col-form-label h2">Direccion:</label>
+            </td>
+            <td style="width:35%;">
+              <input style="font-size:24px" type="text" class="form-control" id="direccion"
+                placeholder="Donde enviamos tu pedido" name="direccion" required>
+            </td>
+            <td style="width:15%;">
+              <label class="col-12 col-md-2 col-form-label h2">Zona:</label>
+         
+   
+            </td>
+            <td style="width:35%;">
+              <select id="localidad" name="localidad">
+                <option value="Ituzaingo Norte"> Ituzaingo Norte </option>
+                <option value="Ituzaingo Sur"> Ituzaingo Sur </option>
+                <option value="Castelar Norte"> Castelar Norte </option>
+                <option value="Castelar Sur"> Castelar Sur </option>
+                <option value="Parque Leloir"> Parque Leloir </option>
+                <option value="Padua"> Padua </option>
+              </select>
+                           
+              <input style="width:200px; text-align:center;" name="fecha" id="fecha" hidden>
+
+              <input style="width:200px; text-align:center;" name="horalocal" id="horalocal" align="center" hidden>
+            </td>
+          </tr>
+          <tr>
+            <td style="width:15%;">
+              <label for="email" class="col-12 col-md-2 col-form-label h2">Email:</label>
+            </td>
+            <td style="width:35%;">
+              <input style="font-size:24px" type="email" class="form-control" id="correo"
+                placeholder="Ingresa tu correo electronico" name="correo" required>
+        
+          </tr>
+          
+            <tr>
+              <td style="width:15%;">
+                <label for="email" class="col-12 col-md-2 col-form-label h2">Nota:</label>
+              </td>
+              <td style="width:85%;" colspan="4">
+                <input style="font-size:24px" type="text" class="form-control" id="nota" row="2"
+                  placeholder="Escribi cualquier aclaracion que quieras hacer sobre tu pedido" name="nota">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="email" class="col-12 col-md-2 col-form-label h2">&nbsp&nbsp </label>
+              </td>
+              <td>
+                <label for="email" class="col-12 col-md-2 col-form-label h2">&nbsp&nbsp </label>
+              </td>
+            </tr>
+        </table>
+        <div class="shopping-cart">
+          <!-- Title -->
+          <table style="width:100%" id="lista_compra" class="table table-striped table-bordered table-responsive"
+            name="lista_compra">
+            <thead>
+              <tr style="font-size:24px">
+                <th class="w-10">Imagen</th>
+                <th class="w-5" style="text-align:right; width:5%">Cant</th>
+                <th class="w-60" style="width:60%">Descripcion</th>
+                <th class="w-5" style="text-align:right;width:5%">Precio</th>
+
+                <th class="w-10" style="text-align:right;width:10%">SubTotal</th>
+                <th class="w-10" scope="col">Eliminar</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+            <tr>
+              <th scope="col">
+                <p id="subtotal"></p>
+              </th>
+              <!-- <th scope="col"></th> -->
+            </tr>
+             
+                <table border="1" style="border-collapse: collapse; width: 100%;">
+                  <tbody>
+                    <tr>
+                      <td style="width: 50%;">
+                        <label for="nota" class="col-12 col-md-12 col-form-label h2">Sub Total </label>
+                      </td>
+                      <td style="width: 50%; text-align: right;">
+                        <input style="text-align:right" id="total" name="total" class="font-weight-bold border-0"
+                          readonly style="background-color: white;"></input>
+                        <input id="articulos" name="articulos" hidden=false></input>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width: 50%;">
+                        <label for="nota" class="col-12 col-md-12 col-form-label h2">Costo de envio</label>
+                      </td>
+                      <td style="width: 50%; text-align: right;">
+                        <input style="text-align:right" id="enviostr" name="enviostr" class="font-weight-bold border-0"
+                          readonly style="background-color: white;"></input>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width: 50%;">
+                        <label for="nota" class="col-12 col-md-12 col-form-label h2">Total Pedido</label>
+                      </td>
+                      <td style="width: 50%; text-align: right;">
+                        <input style="text-align:right" id="totalgralstr" name="totalgralstr"
+                          class="font-weight-bold border-0" readonly style="background-color: white;"></input>
+
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </table>
+            <tr>
+
+
+
+              <!-- <th scope="col"></th> -->
+            </tr>
+          </table>
+          <a>.</a>
+             <a>.</a>
+          <a><b> Importante:</b> Todos los productos estan sujetos a disponobilidad.
+            <a>.</a>
+            <a></b>.</a>
+            <a>Muchas Gracias</a>
+            <table>
+              <tr>
+                <td>
+                  <input id="vaciar-carrito" class="btn btn-danger  btn-lg btn-block" onclick=vaciarCarrito()
+                    type="button" value="Vaciar Carrito"></input>
+                </td>
+                <!--
+              <input class="btn btn-success btn-block" onclick=procesarPedido() type="button"
+                value="Procesar Pedido"></input>
+
+               <a class="btn btn-success btn-block" href="/send-email">Procesar Pedido</a> 
+               name="btnADD" id="btnADD"
+             -->
+                <td>
+                  <input class="btn btn-success btn-lg btn-block" id="boton-procesar" value="Procesar Pedido"
+                    onclick=validar() type="submit">
+
+                  </input>
+
+                  <!-- <button  class="btn btn-success btn-lg btn-block" id="boton-procesar"
+                    onclick="this.disabled=true;
+                            this.value='Enviando, por favor espere...'; 
+                            Swal.fire({
+                              icon: 'success',
+                              title: 'Genial...',
+                              text: 'Procesando Pedido',
+                              showConfirmButton: false,
+                              timer: 5000
+                            });
+                            this.form.submit();" >procesar pedido </button>-->
+                </td>
+              </tr>
+              <tr>
+                <td> <a href="">&nbsp&nbsp</a></td>
+              </tr>
+              <tr>
+                <td> <a href="">&nbsp&nbsp</a></td>
+              </tr>
+              <tr>
+                <td> <a href="">&nbsp&nbsp</a></td>
+              </tr>
+              <hr />
+              <hr />
+            </table>
+      </form>
+
+    </div>
+
+
+
+    </div>
+    </div>
+  </main>
+
+</body>
+
+
+<script>
+  /*
+ if (cliente.addEventListener) {
+      cod_cat.addEventListener("change", cambiar);
+    } else if (cod_cat.attachEvent) {   
+      cod_cat.attachEvent("change", cambiar); 
+    }
+const cliente = document.getElementById("cliente");
+console.dir(cliente);
+cliente.addEventListener("input", function (event) {
+  if (cliente.validity.typeMismatch) {
+    cliente.setCustomValidity("Cargue un Nombre");
+  } else {
+    cliente.setCustomValidity("");
+  }
+});
+*/
+  productosLS = obtenerProductosLocalStorage();
+  console.log(productosLS);
+  console.log("pp");
+  if (productosLS.length === 0) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'No hay productos, selecciona alguno',
+      showConfirmButton: false,
+      timer: 3000
+    }).then(function () {
+      window.location = "./";
+    })
+  }
+  /*
+  var clics = 0;
+  function s() {
+      if(clics == 0) {
+        //primer clic
+        console.log("primer clic");
+      }
+      else {
+        //segundo clic
+        console.log("mas clic");
+          
+      }
+      ++clics;
+  }
+  */
+
+  $(document).ready(function () {
+
+    $('#cliente').change(function () {
+      console.dir('change cliente');
+      valor = document.getElementById("cliente").value.trim();
+      document.getElementById("cliente").value = valor;
+      console.dir("valor");
+      console.dir(valor);
+      console.dir("extension de valor");
+      console.dir(valor.length)
+      if (valor == null || valor.length == 0) {
+
+        document.getElementById("cliente").focus();
+        return false;
+      }
+    });
+
+    $('#correo').change(function () {
+      console.dir('change correo');
+      valorcorreo = document.getElementById("correo").value.trim();
+      document.getElementById("correo").value = valorcorreo;
+      console.dir("valor correo");
+      console.dir(valorcorreo);
+      console.dir("extension de valor");
+      console.dir(valorcorreo.length)
+      if (valorcorreo == null || valorcorreo.length == 0) {
+
+        document.getElementById("correo").focus();
+        return false;
+      }
+    });
+
+    $('#direccion').change(function () {
+      console.dir('change direccion');
+      valordireccion = document.getElementById("direccion").value.trim();
+      document.getElementById("direccion").value = valordireccion;
+      console.dir("valor direccion");
+      console.dir(valordireccion);
+      console.dir("extension de valor");
+      console.dir(valordireccion.length)
+      if (valordireccion == null || valordireccion.length == 0) {
+
+        document.getElementById("direccion").focus();
+        return false;
+      }
+    });
+
+
+    $(document).on("change", "input[type=radio]", function () {
+      console.log("envio ", monto_envio);
+      monto_envio = 0;
+      if (total < 5000) {
+        monto_envio = 300;
+        Swal.fire({
+          icon: 'error',
+          title: 'Le recordamos que si la compra no supera los $ 5000 el envio tiene un costo minimo de $ 300',
+          text: ' el costo de envio es fijado por el servicio de envios, puede estar sujeto a cambios ',
+          showConfirmButton: false,
+          timer: 5000
+        }).then(function () {
+          // window.location = "./";
+        })
+
+      }
+      if (document.getElementById('envio1').checked) {
+        monto_envio = monto_envio + 0;
+      }
+      if (document.getElementById('envio2').checked) {
+        monto_envio = monto_envio + 150;
+      }
+      if (document.getElementById('envio3').checked) {
+        monto_envio = monto_envio + 500;
+      }
+      console.log("monto_envio", monto_envio);
+      document.getElementById('enviostr').value = " " + monto_envio.toFixed(2);
+      total_gral = total + monto_envio
+      document.getElementById('totalgralstr').value = " " + total_gral.toFixed(2);
+
+
+
+    });
+
+    $('#cel').change(function () {
+      console.dir('change cel');
+      valorcel = document.getElementById("cel").value.trim();
+      document.getElementById("cel").value = valorcel;
+      console.dir("valor cel");
+      console.dir(valorcel);
+      console.dir("extension de valor");
+      console.dir(valorcel.length)
+      if (valorcel == null || valorcel.length == 0) {
+
+        document.getElementById("cel").focus();
+        return false;
+      }
+    });
+
+
+    let total = 0;
+    let totalgral = 0;
+    let monto_envio = 0;
+    let articulos = 0;
+    const listaCompra = document.querySelector("#lista_compra tbody");
+
+
+    //const productos = document.querySelector("#trproductos");
+    let productosLS;
+    let total_item = 0;
+    productosLS = obtenerProductosLocalStorage();
+    productosLS.forEach(function (producto) {
+
+      const row = document.createElement('tr');
+      console.log('tipo');
+      console.log(producto.tipo);
+      let total_item = 0;
+      if (producto.tipo == 'kilo.') {
+        total_item = (producto.precio * producto.unid * producto.cant);
+      }
+      else {
+        total_item = (producto.precio * producto.cant);
+      }
+      console.log(total_item);
+      total = total + total_item;
+      total_gral = total + monto_envio
+      document.getElementById('totalgralstr').value = " " + total_gral.toFixed(2);
+      articulos++;
+      row.innerHTML = `
+                <td>
+                    <!--<img height=50px width=50px src="../../img/${producto.img}">-->
+                    <img height=50px width=50px src="${producto.img}">
+                </td>
+                
+                <td class="text-right" >
+                  <input type="text" value="${producto.cant}" name="cant" hidden=true> </input>${producto.cant}</td>
+                <td style="font-size:24px; width:60%">
+                  <input type="text" value="${producto.desc}" name="desc" hidden=true></input>${producto.desc}</td>
+                <td class="text-right" >
+                  <input type="text" value="${producto.precio}" name="prec" hidden=true></input>${producto.precio}</td>
+                <td class="text-right" >
+                  <input type="text" value="${total_item}" name="sttl"  hidden=true></input>${total_item}</td>
+                <td class="text-center">
+                   <input onclick=eliminarProductoLocalStorage(${producto.id}) type="button" value="X"
+                    style="font-size:24px;color:white; background-color:red;" data-id="${producto.id}"></input>
+                </td>
+                <td class="text-right" >
+                  <input type="text" value="${producto.id}" name="prod_id" hidden> </input></td>
+                
+            `;
+
+      listaCompra.appendChild(row);
+
+
+
+    }
+
+    );
+
+
+
+
+    /*
+    for (let i = 0; i < productosLS.length; i++) {
+      let element = Number(productosLS[i].precio * productosLS[i].cant);
+      total = total + element;
+      items ++;
+      console.log(productosLS[i].precio);
+      console.log(productosLS[i].cantidad);
+      console.log(element);
+
+    }
+    */
+    console.log("articulos");
+    console.log(articulos);
+    document.getElementById('total').value = " " + total.toFixed(2);
+    document.getElementById('enviostr').value = " " + monto_envio.toFixed(2);
+    document.getElementById('totalgralstr').value = " " + total_gral.toFixed(2);
+    document.getElementById('articulos').value = articulos;
+    if (total < 5000) {
+      // document.getElementById("boton-procesar").style.visibility = 'hidden';
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Este pedido no supera el minimo de $ 5000 y tiene un costo minimo de $ 300',
+        text: ' el costo de envio es fijado por el servicio de envios, puede estar sujeto a cambios ',
+        showConfirmButton: false,
+        timer: 3000
+      }).then(function () {
+        // window.location = "./";
+      })
+
+    }
+  });
+
+
+
+  //Calcular montos
+
+
+  function vaciarCarrito() {
+    localStorage.clear();
+    console.log('vaciar carrito');
+    Swal.fire({
+      title: 'Vaciando Carrito ....',
+      text: '',
+      showConfirmButton: false,
+      timer: 3000
+    }).then(function () {
+      window.location = "./";
+    })
+
+  }
+
+
+
+  function leerCarrito() {
+    console.log('leerCarrito');
+    console.dir(localStorage);
+  }
+
+  function obtenerProductosLocalStorage() {
+    console.log('obtenerProductosLocalStorage')
+    let productoLS;
+
+    //Comprobar si hay algo en LS
+    if (localStorage.getItem('productos') === null) {
+      console.log('no tiene');
+      productoLS = [];
+    }
+    else {
+      console.log('tiene');
+      console.dir(localStorage.getItem('productos'));
+      productoLS = JSON.parse(localStorage.getItem('productos'));
+    }
+    return productoLS;
+  }
+
+
+  function eliminarProductoLocalStorage(productoID) {
+    console.log('eliminar producto');
+    console.log(productoID);
+    let productosLS;
+    //Obtenemos el arreglo de productos
+    productosLS = obtenerProductosLocalStorage();
+    //Comparar el id del producto borrado con LS
+    productosLS.forEach(function (productoLS, index) {
+      console.log(productoLS.id);
+      if (productoLS.id == productoID) {
+        console.log('encontrado');
+        productosLS.splice(index, 1);
+        Swal.fire({
+          icon: 'error',
+          title: 'Producto Eliminado',
+          text: '',
+          showConfirmButton: false,
+          timer: 2000
+        })
+
+      }
+      location.reload();
+    });
+
+    //Añadimos el arreglo actual al LS
+    localStorage.setItem('productos', JSON.stringify(productosLS));
+  }
+
+
+
+
+
+  function procesarPedido() {
+
+    productosLS = obtenerProductosLocalStorage();
+    datosCorreo = {
+      pro: (productosLS),
+      cli: (cliente.value),
+      cor: (correo.value),
+      cel: (cel.value),
+      nota: (nota.value),
+    }
+
+    console.log(datosCorreo);
+
+    if (productosLS.length === 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'No hay productos, selecciona alguno',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(function () {
+        window.location = "index.html";
+      })
+    }
+    else if (cliente.value === '' || correo.value === '' || cel.value === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Ingrese todos los campos requeridos',
+        showConfirmButton: false,
+        timer: 2000
+      })
+    }
+    else {
+      document.getElementById("boton-procesar").style.visibility = 'hidden';
+      console.dir("mailOptions");
+      console.dir(mailOptions);
+
+
+      // paso 3 mandar el mail
+      transporter.sendMail(mailOptions, function (err, data) {
+        if (err) {
+          console.log('error :', err);
+        } else {
+          console.log("Email enviado de carrito2.hbs");
+          res.status(200).jsonp(req.body);
+
+
+        }
+      });
+
+    }
+  }
+  /*
+  setInterval(validar() { ObserveInputValue($('#cliente').val()); }, 100);
+  */
+  function validar() {
+    console.log("validar");
+    cambio_fecha();
+
+    if ((document.getElementById('envio1').checked) ||
+        (document.getElementById('envio2').checked) ||
+        (document.getElementById('envio1').checked)) { 
+          console.log("true");
+           }
+    else {
+      console.log("falso");
+      document.getElementById("envio1").focus();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Ingrese el tipo de envio.',
+        showConfirmButton: false,
+        timer: 5000
+      });
+      return false;
+    }
+    cliente = document.getElementById('cliente').value.trim();
+    console.dir(cliente);
+    var correo = document.getElementById('correo').value.trim();
+    console.dir(correo);
+    var direccion = document.getElementById('direccion').value.trim();
+    console.dir(direccion);
+    var cel = document.getElementById('cel').value.trim();
+    console.dir(cel);
+    var total = Number(document.getElementById('total').value)
+    console.dir(total);
+    //envio2 = document.getElementById('envio').value)
+
+
+    //console.log("envio",envio2);
+
+
+
+
+
+    if (cliente == null || cliente.length == 0) {
+      document.getElementById("cliente").focus();
+      return false;
+    }
+    if (correo == null || correo.length == 0) {
+      document.getElementById("cliente").focus();
+      return false;
+    }
+    if (direccion == null || direccion.length == 0) {
+      document.getElementById("direccion").focus();
+      return false;
+    }
+    if (direccion == null || direccion.length == 0) {
+      document.getElementById("direccion").focus();
+      return false;
+    }
+    if (cel == null || cel.length == 0) {
+      document.getElementById("cel").focus();
+      return false;
+    }
+
+    console.log(total);
+    if (total == 0) {
+      console.log('entro naty');
+
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Le recordamos que el pedido debe ser mayor a $5000',
+        text: ' ',
+        showConfirmButton: false,
+        timer: 5000
+      }).then(function () {
+        window.location = "./";
+      })
+
+    }
+
+    else {
+      document.getElementById('boton-procesar').value = 'Enviando, por favor espere...';
+      //document.getElementById('boton-procesar').disabled = true;
+      document.getElementById("vaciar-carrito").disabled = true;
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Genial...',
+        text: 'Procesando Pedido',
+        showConfirmButton: false,
+        timer: 5000
+      });
+      document.getElementById("procesar-datos").submit();
+    }
+  }
+
+
+function cambio_fecha() {
+      d = new Date();
+      var z = n => ('0' + n).slice(-2);
+      date = z(d.getUTCDate()) + '/' + z(d.getMonth() + 1) + '/' + z(d.getYear());
+      console.log("date :", date);
+      field = document.querySelector('#fecha');
+      field.value = date;
+      console.log(field.value);
+
+      hora = z(d.getHours()) + ':' +
+        z(d.getMinutes());
+      field = document.querySelector('#horalocal');
+      field.value = hora;
+      console.log("hora :", hora);
+    }
+
+    
+</script>
+  <script>
+        fetch('https://dolarapi.com/v1/dolares/blue')
+            .then(response => response.json())
+            .then(data => console.log(`Compra: ${data.compra}, Venta: ${data.venta}`));
+    </script>
+
+
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2.3.2/dist/email.min.js"></script>
+
+</body>
