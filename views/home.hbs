@@ -1,4 +1,3 @@
-<!-- views/home.hbs -->
 <section class="main-content-area">
     <header class="content-header">
         <h1>Catálogo de Productos</h1>
@@ -8,33 +7,28 @@
     <div class="product-grid">
         {{#each productos}}
             <article class="product-card">
-                  <div class="product-image">
-            {{#if this.foto2 }}
-                <img src="{{this.foto2}}" alt="{{this.nombre}}" loading="lazy">
-            {{else}}
-                <img src="/img/placeholder.jpg" alt="Sin imagen">
-            {{/if}}
-            
-            {{#if this.oferta}}
-                <span class="offer-tag">Oferta</span>
-            {{/if}}
-        </div>
+                <div class="product-image">
+                    {{#if this.foto2 }}
+                        <img src="{{this.foto2}}" alt="{{this.nombre}}" loading="lazy">
+                    {{else}}
+                        <img src="/img/placeholder.jpg" alt="Sin imagen">
+                    {{/if}}
+                    
+                    {{#if this.oferta}}
+                        <span class="offer-tag">Oferta</span>
+                    {{/if}}
+                </div>
+                
                 <div class="product-badge">
                     {{this.categoria}}
                 </div>
+                
                 <div class="product-info">
                     <h3>{{this.titulo}}</h3>
-                     <h2>{{this.des}}</h2>
+                    <p class="description">{{this.des}}</p>
                     <p class="price">${{this.precio1}}</p>
-                    
-                    <div class="product-status">
-                        <!--{{#if this.stock}}
-                            <span class="status-in">En Stock ({{this.stock}})</span>
-                        {{else}}
-                            <span class="status-out">Agotado</span>
-                        {{/if}}-->
-                    </div>
                 </div>
+
                 <footer class="product-footer">
                     <button class="btn-view">Ver Detalles</button>
                 </footer>
@@ -43,7 +37,7 @@
             <div class="no-results">
                 <div class="icon">🔍</div>
                 <h2>No se encontraron resultados</h2>
-                <p>Intenta ajustar los filtros de la barra lateral para encontrar lo que buscas.</p>
+                <p>Intenta ajustar los filtros.</p>
                 <a href="/productos" class="btn-clear">Limpiar filtros</a>
             </div>
         {{/each}}
@@ -51,84 +45,111 @@
 </section>
 
 <style>
-/* Estilos específicos para la vista de productos */
-.content-header {
-    margin-bottom: 30px;
-    border-bottom: 2px solid #e5e7eb;
-    padding-bottom: 15px;
+/* 1. FUERZA AL CONTENEDOR A USAR TODO EL ANCHO */
+.main-content-area {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
+/* 2. CONFIGURACIÓN DEL GRID (Aquí está el truco) */
 .product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    display: grid !important;
+    /* auto-fill: rellena con tantas columnas como quepan */
+    /* 180px: ancho mínimo de cada tarjeta. Si hay más espacio, crecen */
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
     gap: 20px;
+    width: 100%;
 }
 
+/* 3. TARJETA DE PRODUCTO */
 .product-card {
     background: white;
     border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    height: 100%; /* Para que todas midan lo mismo */
     transition: transform 0.2s;
+    min-width: 0; /* Evita que el contenido desborde la celda */
 }
 
 .product-card:hover {
     transform: translateY(-5px);
 }
 
-.product-badge {
-    background: #e0e7ff;
-    color: #4338ca;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 4px 10px;
-    border-radius: 20px;
-    align-self: flex-start;
-    margin-bottom: 15px;
+/* 4. IMÁGENES RESPONSIVAS */
+.product-image {
+    position: relative;
+    width: 100%;
+    height: 150px; /* Altura fija para que el grid sea simétrico */
+    margin-bottom: 10px;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* 5. TEXTOS Y PRECIO */
+.product-info h3 {
+    font-size: 0.95rem;
+    margin: 5px 0;
+    /* Cortar texto si es muy largo */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.description {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 10px;
 }
 
 .price {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
-    color: #111827;
-    margin: 10px 0;
+    margin-top: auto; /* Empuja el precio siempre abajo */
+    color: #111;
 }
 
-.status-in { color: #059669; font-size: 0.9rem; }
-.status-out { color: #dc2626; font-size: 0.9rem; }
-
+/* 6. BOTÓN */
 .btn-view {
     width: 100%;
-    padding: 10px;
-    margin-top: 15px;
-    background: #f3f4f6;
+    padding: 8px;
+    background: #007bff;
+    color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
-    font-weight: 600;
+    font-size: 0.85rem;
 }
 
-.btn-view:hover { background: #e5e7eb; }
-
-/* Estado vacío */
-.no-results {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 60px 20px;
-    background: white;
-    border-radius: 12px;
-    border: 2px dashed #d1d5db;
+/* 7. ADAPTACIÓN PARA MÓVILES (Si es muy angosto, mostrar 2 columnas) */
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important; /* Fuerza 2 columnas en celulares */
+        gap: 10px;
+    }
+    .product-card {
+        padding: 10px;
+    }
+    .product-image {
+        height: 120px;
+    }
 }
 
-.no-results .icon { font-size: 50px; margin-bottom: 20px; }
-.btn-clear {
+.product-badge {
+    background: #f0f0f0;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
     display: inline-block;
-    margin-top: 20px;
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: bold;
 }
 </style>
