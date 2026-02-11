@@ -104,29 +104,32 @@
             </div>
             
             <div class="sidebar-actions">
-                <button type="submit" class="btn-submit">Aplicar Filtros</button>
-                <a href="/productos" class="btn-reset">Limpiar Todo</a>
+                 <!-- <button type="submit" class="btn-submit">Aplicar Filtros</button>
+              <a href="/productos" class="btn-reset">Limpiar Todo</a>-->
             </div>
         </form>
     </div>
 </aside>
 
-
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const group = document.querySelector('.checkbox-group');
     const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+    const form = document.querySelector('.filter-form'); // Referencia al formulario
 
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             if (this.checked) {
-                // Si este se marca, desmarcar todos los demás
+                // Desmarcar los demás (comportamiento tipo Radio Button)
                 checkboxes.forEach(cb => {
                     if (cb !== this) cb.checked = false;
                 });
             }
+            
+            // Ejecutar el envío del formulario automáticamente
+            form.submit();
         });
     });
 });
-
 </script>
+

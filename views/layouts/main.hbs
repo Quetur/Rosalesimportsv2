@@ -129,14 +129,17 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
         /* --- Nombre de Usuario (Ajustado) --- */
-.user-name {
-    color: #555;
-    font-size: 14px;
-    font-weight: 500;
-    margin-left: 15px; /* Empuja el nombre hacia la derecha */
-    margin-right: 5px; /* Ajusta la distancia con el carrito */
-}
+        .user-name {
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 15px;
+            /* Empuja el nombre hacia la derecha */
+            margin-right: 5px;
+            /* Ajusta la distancia con el carrito */
+        }
 
     }
 
@@ -215,51 +218,59 @@
     }
 
     .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Reducimos el espacio entre elementos */
-    flex-wrap: nowrap; /* Evita que se rompa la línea, pero necesitamos controlar el ancho */
-}
-
-/* --- ADAPTACIÓN ESPECÍFICA PARA CELULARES --- */
-@media (max-width: 600px) {
-    .top-navbar {
-        padding: 10px 5px; /* Menos padding lateral para ganar espacio */
-        height: auto;      /* Permite que la barra crezca si es necesario */
-        min-height: 65px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        /* Reducimos el espacio entre elementos */
+        flex-wrap: nowrap;
+        /* Evita que se rompa la línea, pero necesitamos controlar el ancho */
     }
 
-    .nav-right {
-        gap: 8px; /* Espacio mínimo entre iconos y botones */
-    }
+    /* --- ADAPTACIÓN ESPECÍFICA PARA CELULARES --- */
+    @media (max-width: 600px) {
+        .top-navbar {
+            padding: 10px 5px;
+            /* Menos padding lateral para ganar espacio */
+            height: auto;
+            /* Permite que la barra crezca si es necesario */
+            min-height: 65px;
+        }
 
-    /* Reducimos el logo para dar más aire a la derecha */
-    .nav-logo {
-        width: 30px; 
-    }
+        .nav-right {
+            gap: 8px;
+            /* Espacio mínimo entre iconos y botones */
+        }
 
-    .brand-name {
-        font-size: 0.9rem;
-    }
+        /* Reducimos el logo para dar más aire a la derecha */
+        .nav-logo {
+            width: 30px;
+        }
 
-    /* EL BOTÓN LOGOUT: Aseguramos que no se recorte */
-    #btnLogout {
-        padding: 6px 8px;
-        font-size: 0; 
-        min-width: 45px; /* Le damos un ancho mínimo para que sea clickeable */
-        flex-shrink: 0;  /* Obliga al botón a no encogerse más de la cuenta */
-    }
+        .brand-name {
+            font-size: 0.9rem;
+        }
 
-    #btnLogout::after {
-        content: "Salir"; 
-        font-size: 11px;
-    }
+        /* EL BOTÓN LOGOUT: Aseguramos que no se recorte */
+        #btnLogout {
+            padding: 6px 8px;
+            font-size: 0;
+            min-width: 45px;
+            /* Le damos un ancho mínimo para que sea clickeable */
+            flex-shrink: 0;
+            /* Obliga al botón a no encogerse más de la cuenta */
+        }
 
-    /* Ocultar el nombre de usuario en móviles muy pequeños para salvar el diseño */
-    #usuario {
-        display: none !important; /* Opcional: oculta el texto para dar prioridad a los botones */
+        #btnLogout::after {
+            content: "Salir";
+            font-size: 11px;
+        }
+
+        /* Ocultar el nombre de usuario en móviles muy pequeños para salvar el diseño */
+        #usuario {
+            display: none !important;
+            /* Opcional: oculta el texto para dar prioridad a los botones */
+        }
     }
-}
 </style>
 
 <body>
@@ -271,17 +282,17 @@
             </a>
         </div>
 
-
         <div class="nav-right">
+            <!-- Nombre de usuario (se muestra mediante JS tras login) -->
             <span id="usuario" class="user-name" style="display: none;"></span>
 
             <!-- Icono de Carrito con Contador -->
-            <a href="/carritobarra" class="cart-link">
+            <a href="/carritobarra" class="cart-link" style="position: relative; display: inline-block;">
                 <i class="fas fa-shopping-cart fa-2x"></i>
-                <!-- Cambiado de input a span para mejor control visual -->
                 <span id="items" class="cart-count">0</span>
             </a>
 
+            <!-- Botones de Acción (Visibilidad controlada por JS/Backend) -->
             <a href="/admin" id="btnAdmin" class="btn-nav" style="display: none;">Productos</a>
             <button id="btnLogout" class="btn-logout" style="display: none;">Cerrar Sesión</button>
             <a href="/signin" id="btnAcceso" class="btn-login">Acceso</a>
@@ -289,20 +300,20 @@
     </header>
 
     <div class="layout-container">
-        <!-- Solo muestra el sidebar si NO enviamos hideSidebar: true -->
+        <!-- Renderizado condicional del Sidebar (Handlebars) -->
         {{#unless hideSidebar}}
         {{> sidebar }}
         {{/unless}}
 
-        <!-- Ajustamos la clase del main dinámicamente -->
-        <!-- Cambiamos "has-sidebar" por "full-width expanded" para que inicie ancho -->
+        <!-- El contenido principal ajusta su ancho según la presencia del sidebar -->
         <main id="main-content" class="content {{#if hideSidebar}}full-width{{else}}full-width expanded{{/if}}">
             {{{body}}}
         </main>
-
     </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // --- 1. GESTIÓN DE UI Y AUTENTICACIÓN ---
             const token = localStorage.getItem('token_acceso');
             const nombre = localStorage.getItem('nombre');
 
@@ -310,125 +321,70 @@
                 user: document.getElementById('usuario'),
                 admin: document.getElementById('btnAdmin'),
                 logout: document.getElementById('btnLogout'),
-                acceso: document.getElementById('btnAcceso')
+                acceso: document.getElementById('btnAcceso'),
+                sidebar: document.getElementById('sidebar'),
+                toggleBtn: document.getElementById('toggle-btn'),
+                content: document.getElementById('main-content'),
+                itemsCount: document.getElementById('items')
             };
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('toggle-btn');
-            const content = document.getElementById('main-content');
-            if (toggleBtn && sidebar) {
-                // FORZAMOS EL ESTADO INICIAL OCULTO
-                sidebar.classList.add('collapsed');
-                if (content) content.classList.add('expanded');
 
-                // Ajustamos el icono inicial a "flecha derecha"
-                const icono = toggleBtn.querySelector('.icon-arrow') || toggleBtn;
-                if (icono) icono.innerText = '➔';
-
-                toggleBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    sidebar.classList.toggle('collapsed');
-                    if (content) content.classList.toggle('expanded');
-
-                    // Actualizar flecha según el nuevo estado
-                    icono.innerText = sidebar.classList.contains('collapsed') ? '➔' : '⬅';
-                });
-            }
-            toggleBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                sidebar.classList.toggle('collapsed');
-                if (content) content.classList.toggle('expanded');
-
-                // Actualizar flecha según el nuevo estado
-                icono.innerText = sidebar.classList.contains('collapsed') ? '➔' : '⬅';
-            });
             if (token) {
-                console.log("Token detectado. Mostrando opciones de administración.");
-
-                // 1. Mostrar nombre y botón Admin
                 if (ui.user) {
                     ui.user.textContent = nombre || "Usuario";
                     ui.user.style.display = 'inline-block';
                 }
-                if (ui.admin) ui.admin.style.display = 'inline-block'; // <--- Se muestra aquí
-
-                // 2. Mostrar Logout y ocultar Acceso
-                if (ui.logout) ui.logout.style.display = 'inline-block';
+                if (ui.admin) ui.admin.style.display = 'inline-block';
+                if (ui.logout) {
+                    ui.logout.style.display = 'inline-block';
+                    ui.logout.onclick = () => {
+                        localStorage.removeItem('token_acceso');
+                        localStorage.removeItem('nombre');
+                        window.location.href = '/signin';
+                    };
+                }
                 if (ui.acceso) ui.acceso.style.display = 'none';
-
-                // Función de Logout
-                ui.logout.onclick = () => {
-                    localStorage.removeItem('token_acceso');
-                    localStorage.removeItem('nombre');
-                    window.location.href = '/signin';
-                };
             } else {
-                console.log("Sin token. Ocultando opciones de administración.");
                 if (ui.admin) ui.admin.style.display = 'none';
                 if (ui.logout) ui.logout.style.display = 'none';
                 if (ui.acceso) ui.acceso.style.display = 'inline-block';
             }
-        });
-    </script>
-    <script>
 
-        // Usamos DOMContentLoaded para asegurar que el HTML cargó completamente
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('toggle-btn');
-            const content = document.getElementById('main-content');
+            // --- 2. LÓGICA DEL SIDEBAR (Unificada) ---
+            if (ui.toggleBtn && ui.sidebar) {
+                // Estado inicial
+                ui.sidebar.classList.add('collapsed');
+                if (ui.content) ui.content.classList.add('expanded');
 
-            console.log("Estado de elementos:", { sidebar, toggleBtn, content });
+                const icono = ui.toggleBtn.querySelector('.icon-arrow') || ui.toggleBtn;
+                icono.innerText = '➔';
 
-            if (toggleBtn && sidebar) {
-                toggleBtn.addEventListener('click', (e) => {
-                    e.preventDefault(); // Evita cualquier comportamiento extraño
-
-                    // Alternamos las clases
-                    sidebar.classList.toggle('collapsed');
-
-                    if (content) {
-                        content.classList.toggle('expanded');
-                    }
-
-                    // Cambiamos la flecha visualmente
-                    const icono = toggleBtn.querySelector('.icon-arrow') || toggleBtn;
-                    icono.innerText = sidebar.classList.contains('collapsed') ? '➔' : '⬅';
-
-                    console.log("Sidebar colapsado:", sidebar.classList.contains('collapsed'));
+                ui.toggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    ui.sidebar.classList.toggle('collapsed');
+                    if (ui.content) ui.content.classList.toggle('expanded');
+                    icono.innerText = ui.sidebar.classList.contains('collapsed') ? '➔' : '⬅';
                 });
-            } else {
-                console.log("Error: No se encontró el sidebar o el botón. Revisa los IDs en sidebar.hbs");
             }
-        });
 
+            // --- 3. GESTIÓN DE PRODUCTOS ---
+            const productosLS = obtenerProductosLocalStorage();
+            if (ui.itemsCount) {
+                ui.itemsCount.value = productosLS.length;
+            }
 
-
+            function obtenerProductosLocalStorage() {
+                const data = localStorage.getItem('productos');
+                try {
+                    return data ? JSON.parse(data) : [];
+                } catch (e) {
+                    console.error("Error parseando productos de LS", e);
+                    return [];
+                }
+            }
+        }); 
 
     </script>
 
-    <script>
-        productosLS = obtenerProductosLocalStorage();
-        //productoLS = JSON.parse(localStorage.getItem('productos'));
-        console.log(productosLS);
-        console.log(productosLS.length);
-        document.getElementById('items').value = productosLS.length;
-        function obtenerProductosLocalStorage() {
-            console.log('obtenerProductosLocalStorage')
-            let productoLS;
-
-            //Comprobar si hay algo en LS
-            if (localStorage.getItem('productos') === null) {
-                console.log('no tiene');
-                productoLS = [];
-            }
-            else {
-                console.log('tiene navigation');
-                // console.dir(localStorage.getItem('productos'));
-                productoLS = JSON.parse(localStorage.getItem('productos'));
-            }
-            // document.getElementById('items').value = localStorage.length;
-            return productoLS;
-    </script>
 </body>
 
 </html>

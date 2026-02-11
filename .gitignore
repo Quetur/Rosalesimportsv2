@@ -17,6 +17,6 @@ git push -u origin main
 actualizar
 git add .
 git status
-git remote add origin https://github.com/Quetur/Rosalesimportsv2.git
+git commit -m "actualizacion"
 git branch -M main
 git push -u origin main

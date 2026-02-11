@@ -1,155 +1,500 @@
+<style>
+    /* 1. FUERZA AL CONTENEDOR A USAR TODO EL ANCHO */
+    .main-content-area {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* 2. CONFIGURACIÓN DEL GRID */
+    .product-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+        gap: 20px;
+        width: 100%;
+    }
+
+    /* 3. TARJETA DE PRODUCTO */
+    .product-card {
+        background: white;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: transform 0.2s;
+        box-sizing: border-box;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* 4. IMÁGENES */
+    .product-image {
+        width: 100%;
+        height: 150px;
+        margin-bottom: 10px;
+        flex-shrink: 0;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* 5. CUERPO DE LA TARJETA (Título y descripción) */
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        /* Empuja el footer hacia abajo */
+    }
+
+    .product-badge {
+        background: #f0f0f0;
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 10px;
+        align-self: flex-start;
+        margin-bottom: 5px;
+    }
+
+    .product-info h3 {
+        font-size: 0.95rem;
+        margin: 5px 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .description {
+        font-size: 0.8rem;
+        color: #666;
+        margin-bottom: 15px;
+    }
+
+    /* 6. FOOTER DE LA TARJETA (Precio y Botón alineados) */
+    .product-footer {
+        margin-top: auto;
+        /* Se pega al fondo de la tarjeta */
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .price {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #111;
+        text-align: right;
+        /* Alinea el precio a la derecha */
+        width: 100%;
+    }
+
+    .product-footer .price-dolar {
+    color: #28a745; /* Un verde estándar de éxito/dinero */
+    font-weight: bold;
+}
+
+    .btn-view {
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: bold;
+        transition: background 0.2s;
+    }
+
+    .btn-view:hover {
+        background: #0056b3;
+    }
+
+    /* 7. ADAPTACIÓN MÓVIL */
+    @media (max-width: 480px) {
+        .product-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px;
+        }
+
+        .product-card {
+            padding: 10px;
+        }
+
+        .product-image {
+            height: 120px;
+        }
+    }
+
+    /* Contenedor principal (fondo oscuro) */
+    /* Modifica esta parte en tu <style> */
+    .modal {
+        display: none;
+        /* Se mantiene oculto inicialmente */
+        position: fixed;
+        z-index: 1000;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(5px);
+
+        /* Estas tres líneas son la clave del centrado */
+        align-items: center;
+        /* Centrado vertical */
+        justify-content: center;
+        /* Centrado horizontal */
+        display: none;
+        /* Se sobreescribirá con flex en JS */
+    }
+
+
+    /* La tarjeta del modal */
+    .modal-content {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 15px;
+        /* Bordes redondeados */
+        width: 90%;
+        max-width: 600px;
+        /* Más grande */
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        position: relative;
+        animation: slideUp 0.4s ease-out;
+        max-width: 500px;
+        /* Un poco más ancho */
+        padding: 40px;
+        /* Más espacio interno en el modal */
+    }
+
+    /* Botón cerrar */
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #888;
+        transition: color 0.2s;
+    }
+
+    .close-btn:hover {
+        color: #333;
+    }
+
+    /* Animación de entrada */
+    @keyframes slideUp {
+        from {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+
+    /* --- SECCIÓN CANTIDAD --- */
+    .cantidad-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
+        /* Distancia extrema entre (-) [cant] (+) */
+        margin: 50px 0;
+        /* Mucho espacio arriba y abajo */
+    }
+
+    .cantidad-control button {
+        width: 55px;
+        /* Botones más grandes */
+        height: 55px;
+        font-size: 24px;
+        cursor: pointer;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+    }
+
+    .cantidad-control button:hover {
+        background-color: #eee;
+    }
+
+    #input-cantidad {
+        width: 50px;
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+        border: none;
+        background: transparent;
+    }
+
+
+
+    /* --- SECCIÓN ACCIONES (BOTONES FINALES) --- */
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 30px;
+        /* Distancia amplia entre Cancelar y Aceptar */
+        margin-top: 60px;
+        /* Separación drástica de la sección de arriba */
+    }
+
+    .btn-close,
+    .btn-confirm {
+        padding: 15px 35px;
+        /* Botones más alargados y elegantes */
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+
+    .btn-close {
+        background-color: #e0e0e0;
+        color: #333;
+    }
+
+    .btn-confirm {
+        background-color: #28a745;
+        /* Color verde para éxito */
+        color: white;
+    }
+</style>
+
 <section class="main-content-area">
     <header class="content-header">
         <h1>Catálogo de Productos</h1>
-        <p class="results-count">Mostrando {{productos.length}} productos encontrados</p>
+
+        <!-- Buscador en tiempo real -->
+        <search class="search-container">
+            <div class="search-form">
+                <input type="text" id="search-input" placeholder="Escribe para buscar..." aria-label="Buscar productos">
+                <span class="search-icon">🔍</span>
+            </div>
+        </search>
+
+        <p class="results-count">Mostrando <strong id="count">{{productos.length}}</strong> productos encontrados</p>
     </header>
 
-    <div class="product-grid">
+    <div class="product-grid" id="product-grid">
         {{#each productos}}
-            <article class="product-card">
-                <div class="product-image">
-                    {{#if this.foto2 }}
-                        <img src="{{this.foto2}}" alt="{{this.nombre}}" loading="lazy">
-                    {{else}}
-                        <img src="/img/placeholder.jpg" alt="Sin imagen">
-                    {{/if}}
-                    
-                    {{#if this.oferta}}
-                        <span class="offer-tag">Oferta</span>
-                    {{/if}}
-                </div>
-                
-                <div class="product-badge">
-                    {{this.categoria}}
-                </div>
-                
-                <div class="product-info">
-                    <h3>{{this.titulo}}</h3>
-                    <p class="description">{{this.des}}</p>
-                    <p class="price">${{this.precio1}}</p>
-                </div>
-
-                <footer class="product-footer">
-                    <button class="btn-view">Ver Detalles</button>
-                </footer>
-            </article>
-        {{else}}
-            <div class="no-results">
-                <div class="icon">🔍</div>
-                <h2>No se encontraron resultados</h2>
-                <p>Intenta ajustar los filtros.</p>
-                <a href="/productos" class="btn-clear">Limpiar filtros</a>
+        <article class="product-card" data-title="{{this.titulo}}" data-category="{{this.categoria}}">
+            <div class="product-image">
+                {{#if this.foto2}}
+                <img src="{{this.foto2}}" alt="{{this.titulo}}" loading="lazy">
+                {{else}}
+                <img src="/img/placeholder.jpg" alt="Sin imagen">
+                {{/if}}
+                {{#if this.oferta}}<span class="offer-tag">Oferta</span>{{/if}}
             </div>
+
+            <div class="product-badge">{{this.categoria}}</div>
+
+            <div class="product-info">
+                <h3>{{this.titulo}}</h3>
+
+                <h3>{{this.des}}</h3>
+            </div>
+
+            <footer class="product-footer">
+                <div class="price price-dolar">u$s {{this.precio1}}</div>
+                <div class="price">
+                    u$s <span class="precio-final" data-base="{{this.precio1}}">{{this.precio1}}</span>
+                </div>
+                <button onclick="abrirModal('{{this.titulo}}')" class="btn-view" data-desc="{{this.titulo}}"
+                    data-price="{{this.precio1}}"   data-id="{{this.id}}" data-img="{{this.foto2}}" >Agregar</button>
+                <!--<button  class="">Abrir Modal Moderno</button>-->
+            </footer>
+        </article>
         {{/each}}
+
+        <!-- Mensaje si no hay coincidencias (oculto por defecto) -->
+        <div id="no-results" class="no-results" style="display: none;">
+            <p>No se encontraron coincidencias.</p>
+        </div>
     </div>
 </section>
 
-<style>
-/* 1. FUERZA AL CONTENEDOR A USAR TODO EL ANCHO */
-.main-content-area {
-    width: 100%;
-    max-width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-}
 
-/* 2. CONFIGURACIÓN DEL GRID (Aquí está el truco) */
-.product-grid {
-    display: grid !important;
-    /* auto-fill: rellena con tantas columnas como quepan */
-    /* 180px: ancho mínimo de cada tarjeta. Si hay más espacio, crecen */
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
-    gap: 20px;
-    width: 100%;
-}
+<div id="miModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 id="modal-titulo"></h2>
+        <p>¿Cuántas unidades deseas agregar?</p>
+        <div class="cantidad-control">
+            <button type="button" class="btn-menos" onclick="cambiarCantidad(-1)">-</button>
+            <input type="number" id="input-cantidad" value="1" min="1" readonly>
+            <button type="button" class="btn-mas" onclick="cambiarCantidad(1)">+</button>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-close" id="btn-cancelar">Cancelar</button>
+            <button class="btn-confirm" id="btn-confirmar">Aceptar</button>
+        </div>
+    </div>
+</div>
 
-/* 3. TARJETA DE PRODUCTO */
-.product-card {
-    background: white;
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* Para que todas midan lo mismo */
-    transition: transform 0.2s;
-    min-width: 0; /* Evita que el contenido desborde la celda */
-}
+<script>
+ fetch('https://dolarapi.com/v1/dolares/cripto')
+    .then(response => response.json())
+    .then(data => {
+        const dolarBlue = data.venta;
+        const ventaConMargen = data.venta + 15;
+        
+        // Seleccionamos todos los contenedores de precio
+        const preciosDom = document.querySelectorAll('.precio-final');
+        
+        preciosDom.forEach(span => {
+            // Obtenemos el precio base del atributo data
+            const precioBase = parseFloat(span.getAttribute('data-base'));
+            
+            // Calculamos el total (Precio USD * Dólar Blue + 20
+            const precioCalculado = precioBase * ventaConMargen;
+            
+            // Formateamos con separador de miles y 2 decimales
+            span.textContent = precioCalculado.toLocaleString('es-AR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            
+            // Opcional: Cambiar el prefijo de "u$s" a "$" si ya está en pesos
+            span.parentElement.innerHTML = `$ ${span.outerHTML}`;
+        });
+         console.log(`Cotización dolar venta: ${dolarBlue.toFixed(2)}`);
+        console.log(`Cotización aplicada: ${ventaConMargen.toFixed(2)}`);
+    })
+    .catch(error => console.error('Error al obtener datos:', error));
 
-.product-card:hover {
-    transform: translateY(-5px);
-}
 
-/* 4. IMÁGENES RESPONSIVAS */
-.product-image {
-    position: relative;
-    width: 100%;
-    height: 150px; /* Altura fija para que el grid sea simétrico */
-    margin-bottom: 10px;
-}
 
-.product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-}
+    function abrirModal(titulo) {
+        const modal = document.getElementById("miModal");
+        const modalTitulo = document.getElementById("modal-titulo");
 
-/* 5. TEXTOS Y PRECIO */
-.product-info h3 {
-    font-size: 0.95rem;
-    margin: 5px 0;
-    /* Cortar texto si es muy largo */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.description {
-    font-size: 0.8rem;
-    color: #666;
-    margin-bottom: 10px;
-}
-
-.price {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-top: auto; /* Empuja el precio siempre abajo */
-    color: #111;
-}
-
-/* 6. BOTÓN */
-.btn-view {
-    width: 100%;
-    padding: 8px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.85rem;
-}
-
-/* 7. ADAPTACIÓN PARA MÓVILES (Si es muy angosto, mostrar 2 columnas) */
-@media (max-width: 480px) {
-    .product-grid {
-        grid-template-columns: repeat(2, 1fr) !important; /* Fuerza 2 columnas en celulares */
-        gap: 10px;
+        modalTitulo.textContent = "producto : " + modalTitulo.textContent;
+        // CAMBIO: Usar "flex" en lugar de "block"
+        modal.style.display = "flex";
     }
-    .product-card {
-        padding: 10px;
-    }
-    .product-image {
-        height: 120px;
-    }
-}
 
-.product-badge {
-    background: #f0f0f0;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 10px;
-    display: inline-block;
-}
-</style>
+
+
+    // Función genérica para cerrar (para reutilizar código)
+    function cerrarModal() {
+        document.getElementById("miModal").style.display = "none";
+    }
+
+    // Eventos de cierre
+    document.querySelector(".close-btn").onclick = cerrarModal;
+
+    document.querySelector(".btn-close").onclick = cerrarModal;
+    // Opcional: Cerrar al hacer clic fuera del contenido blanco
+    window.onclick = (event) => {
+        const modal = document.getElementById("miModal");
+        if (event.target == modal) {
+            cerrarModal();
+        }
+    }
+</script>
+<script>
+    function cambiarCantidad(valor) {
+        const input = document.getElementById('input-cantidad');
+        let actual = parseInt(input.value);
+        let nueva = actual + valor;
+
+        // Evita que baje de 1
+        if (nueva >= 1) {
+            input.value = nueva;
+        }
+    }
+</script>
+<script>
+    const modal = document.getElementById('modal-cantidad');
+    const inputCant = document.getElementById('input-cantidad');
+    const modalTitulo = document.getElementById('modal-titulo');
+    let productoActual = null;
+
+    // Delegación de eventos para los botones "Agregar"
+    document.getElementById('product-grid').addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-view')) {
+            const btn = e.target;
+            productoActual = {
+                nombre: btn.getAttribute('data-name'),
+                precio: btn.getAttribute('data-price')
+            };
+
+            modalTitulo.textContent = productoActual.nombre;
+            inputCant.value = 1;
+            //  modal.style.display = 'block';
+        }
+    });
+
+    // Cerrar al cancelar
+    document.getElementById('btn-cancelar').onclick = () => {
+        // modal.style.display = 'none';
+    };
+
+    // Confirmar y procesar
+    document.getElementById('btn-confirmar').onclick = () => {
+        const cantidad = inputCant.value;
+        if (cantidad > 0) {
+            console.log(` id: ${productoActual.id} | Pedido: ${productoActual.nombre} | Cantidad: ${cantidad} | Subtotal: ${productoActual.precio * cantidad}`);
+
+            // Aquí puedes llamar a tu función de carrito
+            //  alert(`¡${cantidad} ${productoActual.nombre} agregados!`);
+
+            // modal.style.display = 'none';
+        } else {
+            alert("Por favor ingresa una cantidad válida");
+        }
+    };
+
+    // Cerrar si se hace clic fuera del recuadro blanco
+    window.onclick = (event) => {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    // Lógica para el buscador en tiempo real
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('search-input');
+        const products = document.querySelectorAll('.product-card');
+        const countDisplay = document.getElementById('count');
+        const noResults = document.getElementById('no-results');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            let visibleCount = 0;
+
+            products.forEach(card => {
+                // Buscamos en el título y la categoría (vía atributos data)
+                const title = card.getAttribute('data-title').toLowerCase();
+                const category = card.getAttribute('data-category').toLowerCase();
+
+                if (title.includes(term) || category.includes(term)) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Actualizar contador y mensaje de error
+            countDisplay.textContent = visibleCount;
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        });
+    });
+</script>
+
+</body>
