@@ -87,11 +87,11 @@
         font-size: 1.2rem;
     }
 
-    .btn-login {
-        color: #3498db;
-        text-decoration: none;
-        font-weight: 600;
-    }
+.btn-login {
+    color: #000000; /* Negro puro */
+    text-decoration: none;
+    font-weight: 800; /* Aumentado a 800 para un "bold" más marcado */
+}
 
     /* --- ADAPTACIÓN PARA CELULARES (Mobile) --- */
     @media (max-width: 600px) {
@@ -312,6 +312,25 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            actualizarContadorCarrito();
+        });
+        function actualizarContadorCarrito() {
+            // 1. Obtener los productos de localStorage (si no hay, usar array vacío)
+            const carrito = JSON.parse(localStorage.getItem('productos')) || [];
+
+            // 2. Sumar las cantidades de todos los productos
+            const totalItems = carrito.reduce((acc, producto) => acc + parseInt(producto.cant), 0);
+
+            // 3. Pintar en el DOM (el id "items" de tu HTML)
+            const contador = document.getElementById('items');
+            if (contador) {
+                contador.textContent = totalItems;
+            }
+        }
+    </script>
+
+    <script>
         document.addEventListener("DOMContentLoaded", () => {
             // --- 1. GESTIÓN DE UI Y AUTENTICACIÓN ---
             const token = localStorage.getItem('token_acceso');
@@ -381,7 +400,7 @@
                     return [];
                 }
             }
-        }); 
+        });
 
     </script>
 

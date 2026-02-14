@@ -1,0 +1,30 @@
+<body>
+  <main>
+    <div class="container">
+      <div class="row mt-3">
+        <div class="col">
+          <header class="masthead d-flex"></header>
+             <div class="container text-center my-auto">
+               
+                <p class="titulo">Gracias por confiar en nosotros !!!...</p>
+            </div>
+          </header>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    localStorage.clear();
+    console.log('vaciar carrito');
+    Swal.fire({
+      title: 'Gracias por confiar en nosotros !!!...',
+      text: 'Pedido confirmado ....',
+      showConfirmButton: false,
+      timer: 3000
+    }).then(function () {
+      window.location = "./";
+    })
+  </script>
+
+</body>
