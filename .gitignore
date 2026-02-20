@@ -1,0 +1,22 @@
+node_modules
+.vscode
+README.md
+docs
+.env
+keys.js
+
+primera vez
+echo "# Rosalesimportsv2" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Quetur/Rosalesimportsv2.git
+git push -u origin main
+
+actualizar
+git add .
+git status
+git commit -m "actualizacion"
+git branch -M main
+git push -u origin main

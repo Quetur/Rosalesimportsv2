@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>RosalesImports</title>
+</head>
+<style>
+    /* --- Estilos de la Barra Superior (Fondo Blanco) --- */
+    .top-navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #ffffff;
+        /* Fondo Blanco */
+        padding: 10px 20px;
+        height: 65px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        /* Sombra suave para separar del contenido */
+        border-bottom: 1px solid #eee;
+    }
+
+    .brand-name {
+        color: #333;
+        /* Texto oscuro para fondo blanco */
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    /* --- Nombre de Usuario --- */
+    #usuario {
+        color: #555;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    /* --- Botón de Admin (Estilo Destacado) --- */
+    #btnAdmin {
+        background-color: #2c3e50;
+        color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: background 0.3s ease;
+    }
+
+    #btnAdmin:hover {
+        background-color: #34495e;
+    }
+
+    /* --- Botón Logout (Rojo suave para fondo blanco) --- */
+    #btnLogout {
+        background-color: #fdf2f2;
+        /* Fondo muy claro */
+        color: #e74c3c;
+        /* Texto rojo */
+        border: 1px solid #e74c3c;
+        padding: 7px 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    #btnLogout:hover {
+        background-color: #e74c3c;
+        color: #ffffff;
+    }
+
+    /* --- Icono Carrito y Otros Enlaces --- */
+    .cart-link {
+        text-decoration: none;
+        color: #333;
+        font-size: 1.2rem;
+    }
+
+.btn-login {
+    color: #000000; /* Negro puro */
+    text-decoration: none;
+    font-weight: 800; /* Aumentado a 800 para un "bold" más marcado */
+}
+
+    /* --- ADAPTACIÓN PARA CELULARES (Mobile) --- */
+    @media (max-width: 600px) {
+        .top-navbar {
+            padding: 10px;
+        }
+
+        .brand-name {
+            font-size: 1rem;
+        }
+
+        /* RECORTE DEL BOTÓN LOGOUT */
+        #btnLogout {
+            padding: 6px 10px;
+            font-size: 0;
+            /* Oculta el texto largo */
+        }
+
+        #btnLogout::after {
+            content: "Salir";
+            /* Texto corto */
+            font-size: 12px;
+        }
+
+        /* Botón Admin más compacto */
+        #btnAdmin {
+            padding: 6px 8px;
+            font-size: 11px;
+        }
+
+        /* Ocultar nombre si el espacio es muy crítico */
+        #usuario {
+            max-width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* --- Nombre de Usuario (Ajustado) --- */
+        .user-name {
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 15px;
+            /* Empuja el nombre hacia la derecha */
+            margin-right: 5px;
+            /* Ajusta la distancia con el carrito */
+        }
+
+    }
+
+    /* --- Estilos del Carrito --- */
+    .cart-link {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: #333;
+        font-size: 1.4rem;
+        margin-right: 10px;
+    }
+
+    #cart-count {
+        position: absolute;
+        top: -8px;
+        right: -10px;
+        background-color: #e74c3c;
+        /* Rojo notificación */
+        color: white;
+        font-size: 11px;
+        font-weight: bold;
+        height: 18px;
+        width: 18px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid #fff;
+    }
+
+    /* Ajuste mobile para el carrito */
+    @media (max-width: 600px) {
+        .cart-link {
+            font-size: 1.2rem;
+            margin-right: 5px;
+        }
+    }
+
+    .cart-link i {
+        /* Tamaño estándar (suele ser 16px o 1rem) */
+        font-size: 28px;
+
+        /* Eliminar el degradado y volver a un color sólido */
+        background: none;
+        -webkit-background-clip: initial;
+        -webkit-text-fill-color: initial;
+        color: #000000;
+        /* Sustituye por el color que tenías antes */
+
+        /* Quitar efectos extra */
+        display: inline-block;
+        filter: none;
+        position: relative;
+        /* Importante para que el contador se posicione respecto al icono */
+    }
+
+
+
+
+    .cart-count {
+        position: absolute;
+        top: -5px;
+        right: -10px;
+        background-color: #ff4d4d;
+        /* Rojo llamativo */
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+        font-weight: bold;
+        min-width: 15px;
+        text-align: center;
+        line-height: 1;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        /* Reducimos el espacio entre elementos */
+        flex-wrap: nowrap;
+        /* Evita que se rompa la línea, pero necesitamos controlar el ancho */
+    }
+
+    /* --- ADAPTACIÓN ESPECÍFICA PARA CELULARES --- */
+    @media (max-width: 600px) {
+        .top-navbar {
+            padding: 10px 5px;
+            /* Menos padding lateral para ganar espacio */
+            height: auto;
+            /* Permite que la barra crezca si es necesario */
+            min-height: 65px;
+        }
+
+        .nav-right {
+            gap: 8px;
+            /* Espacio mínimo entre iconos y botones */
+        }
+
+        /* Reducimos el logo para dar más aire a la derecha */
+        .nav-logo {
+            width: 30px;
+        }
+
+        .brand-name {
+            font-size: 0.9rem;
+        }
+
+        /* EL BOTÓN LOGOUT: Aseguramos que no se recorte */
+        #btnLogout {
+            padding: 6px 8px;
+            font-size: 0;
+            min-width: 45px;
+            /* Le damos un ancho mínimo para que sea clickeable */
+            flex-shrink: 0;
+            /* Obliga al botón a no encogerse más de la cuenta */
+        }
+
+        #btnLogout::after {
+            content: "Salir";
+            font-size: 11px;
+        }
+
+        /* Ocultar el nombre de usuario en móviles muy pequeños para salvar el diseño */
+        #usuario {
+            display: none !important;
+            /* Opcional: oculta el texto para dar prioridad a los botones */
+        }
+    }
+</style>
+
+<body>
+    <header class="top-navbar">
+        <div class="nav-left">
+            <a href="/" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <img src="/img/logo.jpg" alt="Logo" class="nav-logo">
+                <span class="brand-name">RosalesImports</span>
+            </a>
+        </div>
+
+        <div class="nav-right">
+            <!-- Nombre de usuario (se muestra mediante JS tras login) -->
+            <span id="usuario" class="user-name" style="display: none;"></span>
+
+            <!-- Icono de Carrito con Contador -->
+            <a href="/carritobarra" class="cart-link" style="position: relative; display: inline-block;">
+                <i class="fas fa-shopping-cart fa-2x"></i>
+                <span id="items" class="cart-count">0</span>
+            </a>
+
+            <!-- Botones de Acción (Visibilidad controlada por JS/Backend) -->
+            <a href="/admin" id="btnAdmin" class="btn-nav" style="display: none;">Productos</a>
+            <button id="btnLogout" class="btn-logout" style="display: none;">Cerrar Sesión</button>
+            <a href="/signin" id="btnAcceso" class="btn-login">Acceso</a>
+        </div>
+    </header>
+
+    <div class="layout-container">
+        <!-- Renderizado condicional del Sidebar (Handlebars) -->
+        {{#unless hideSidebar}}
+        {{> sidebar }}
+        {{/unless}}
+
+        <!-- El contenido principal ajusta su ancho según la presencia del sidebar -->
+        <main id="main-content" class="content {{#if hideSidebar}}full-width{{else}}full-width expanded{{/if}}">
+            {{{body}}}
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            actualizarContadorCarrito();
+        });
+        function actualizarContadorCarrito() {
+            // 1. Obtener los productos de localStorage (si no hay, usar array vacío)
+            const carrito = JSON.parse(localStorage.getItem('productos')) || [];
+
+            // 2. Sumar las cantidades de todos los productos
+            const totalItems = carrito.reduce((acc, producto) => acc + parseInt(producto.cant), 0);
+
+            // 3. Pintar en el DOM (el id "items" de tu HTML)
+            const contador = document.getElementById('items');
+            if (contador) {
+                contador.textContent = totalItems;
+            }
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // --- 1. GESTIÓN DE UI Y AUTENTICACIÓN ---
+            const token = localStorage.getItem('token_acceso');
+            const nombre = localStorage.getItem('nombre');
+
+            const ui = {
+                user: document.getElementById('usuario'),
+                admin: document.getElementById('btnAdmin'),
+                logout: document.getElementById('btnLogout'),
+                acceso: document.getElementById('btnAcceso'),
+                sidebar: document.getElementById('sidebar'),
+                toggleBtn: document.getElementById('toggle-btn'),
+                content: document.getElementById('main-content'),
+                itemsCount: document.getElementById('items')
+            };
+
+            if (token) {
+                if (ui.user) {
+                    ui.user.textContent = nombre || "Usuario";
+                    ui.user.style.display = 'inline-block';
+                }
+                if (ui.admin) ui.admin.style.display = 'inline-block';
+                if (ui.logout) {
+                    ui.logout.style.display = 'inline-block';
+                    ui.logout.onclick = () => {
+                        localStorage.removeItem('token_acceso');
+                        localStorage.removeItem('nombre');
+                        window.location.href = '/signin';
+                    };
+                }
+                if (ui.acceso) ui.acceso.style.display = 'none';
+            } else {
+                if (ui.admin) ui.admin.style.display = 'none';
+                if (ui.logout) ui.logout.style.display = 'none';
+                if (ui.acceso) ui.acceso.style.display = 'inline-block';
+            }
+
+            // --- 2. LÓGICA DEL SIDEBAR (Unificada) ---
+            if (ui.toggleBtn && ui.sidebar) {
+                // Estado inicial
+                ui.sidebar.classList.add('collapsed');
+                if (ui.content) ui.content.classList.add('expanded');
+
+                const icono = ui.toggleBtn.querySelector('.icon-arrow') || ui.toggleBtn;
+                icono.innerText = '➔';
+
+                ui.toggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    ui.sidebar.classList.toggle('collapsed');
+                    if (ui.content) ui.content.classList.toggle('expanded');
+                    icono.innerText = ui.sidebar.classList.contains('collapsed') ? '➔' : '⬅';
+                });
+            }
+
+            // --- 3. GESTIÓN DE PRODUCTOS ---
+            const productosLS = obtenerProductosLocalStorage();
+            if (ui.itemsCount) {
+                ui.itemsCount.value = productosLS.length;
+            }
+
+            function obtenerProductosLocalStorage() {
+                const data = localStorage.getItem('productos');
+                try {
+                    return data ? JSON.parse(data) : [];
+                } catch (e) {
+                    console.error("Error parseando productos de LS", e);
+                    return [];
+                }
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>

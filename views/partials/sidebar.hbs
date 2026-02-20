@@ -1,0 +1,135 @@
+
+<style>
+/* Estilos locales para asegurar el funcionamiento del botón */
+.sidebar-header {
+    margin-bottom: 20px;
+}
+
+.sidebar-title {
+    font-size: 1.2rem;
+    color: #1f2937;
+    margin: 0;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 10px 0;
+}
+
+.label-text {
+    font-size: 0.95rem;
+    color: #4b5563;
+}
+
+.sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* El botón Toggle DEBE tener position absolute con respecto al aside */
+.toggle-handler {
+    position: absolute;
+    right: -40px; /* Lo empuja fuera de la barra */
+    top: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--p-color);
+    color: white;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+    z-index: 1001; /* Asegura estar sobre el contenido */
+    font-size: 1.2rem;
+    transition: background 0.2s;
+}
+
+.toggle-handler:hover {
+    background-color: #1d4ed8;
+}
+
+/* Ajuste para que los inputs no se vean pero sean funcionales */
+.custom-check input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+</style>
+<aside id="sidebar" class="sidebar">
+    <!-- BOTÓN DE CONTROL: Debe estar fuera de sidebar-inner para no recortarse -->
+    <button type="button" id="toggle-btn" class="toggle-handler" title="Alternar filtros">
+        <span class="icon-arrow">⬅</span>
+    </button>
+
+    <div class="sidebar-inner">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Filtros</h2>
+            <hr class="divider">
+        </div>
+        
+        <form action="/productos" method="GET" class="filter-form">
+            <div class="checkbox-group">
+                <!-- Usamos el helper isChecked que definimos en app.js -->
+                <label class="custom-check">
+                    <input type="checkbox" name="f1" {{isChecked filtros "f1"}}>
+                    <span class="box"></span> 
+                    <span class="label-text">Perfumes</span>
+                </label>
+
+                <label class="custom-check">
+                    <input type="checkbox" name="f2" {{isChecked filtros "f2"}}>
+                    <span class="box"></span> 
+                    <span class="label-text">Cargadores</span>
+                </label>
+
+                <label class="custom-check">
+                    <input type="checkbox" name="f3" {{isChecked filtros "f3"}}>
+                    <span class="box"></span> 
+                    <span class="label-text">Fundas</span>
+                </label>
+
+                <label class="custom-check">
+                    <input type="checkbox" name="f4" {{isChecked filtros "f4"}}>
+                    <span class="box"></span> 
+                    <span class="label-text">Accesorios</span>
+                </label>
+            </div>
+            
+            <div class="sidebar-actions">
+                 <!-- <button type="submit" class="btn-submit">Aplicar Filtros</button>
+              <a href="/productos" class="btn-reset">Limpiar Todo</a>-->
+            </div>
+        </form>
+    </div>
+</aside>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const group = document.querySelector('.checkbox-group');
+    const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+    const form = document.querySelector('.filter-form'); // Referencia al formulario
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                // Desmarcar los demás (comportamiento tipo Radio Button)
+                checkboxes.forEach(cb => {
+                    if (cb !== this) cb.checked = false;
+                });
+            }
+            
+            // Ejecutar el envío del formulario automáticamente
+            form.submit();
+        });
+    });
+});
+</script>
+
