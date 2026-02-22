@@ -1,0 +1,201 @@
+<body>
+  <div class="container modificarproducto">
+      <p style="width:500px; align= left" readonly>Categoria</p>
+    <select name="combo_categoria" id="combo_categoria"  style="width: 100%;  text-align: right;">
+      {{#each cat}}
+
+         {{#if id_categoria_producto}}
+         
+        <option selected value={{id_categoria}}>{{des}}</option>
+      {{else}}
+       <option value={{id_categoria}}>{{des}}</option>
+      {{/if}}
+      {{/each}}
+      
+    </select>
+ 
+    </select>
+    {{#each pro}}
+
+    <form class="grid-div" action="/productomodi/{{id_producto}}" method="post">
+      <input id="id_categoria" name="id_categoria" value="{{id_categoria}}" hidden=true> </input>
+     
+      <table border=3 style="border-collapse: separate;" id="tabla" align="center">
+        <tr>
+          <td valign="top" class="descripcion-producto" >
+              <p  style="width:500px; align= left" readonly> Descripcion</p>
+              <input id="des" name="des" value="{{des}}" style="width:500px; align= left"> </input>            
+          </td>
+           <td valign="top" class="descripcion-producto" >
+            <p value="Titulo" style="width:500px; align= left" readonly> Titulo</p>
+              <input id="titulo" name="titulo" value="{{titulo}}" style="width:200px; align= center"> </input>
+          </td>
+        </tr>
+        <tr>
+         
+        </tr>
+        <tr>
+          <td>
+
+              {{#if foto2}}
+              <!-- <img class="grid-img" src="../../img/{{foto2}}" value="../../img/{{foto2}}" />-->
+              <img class="grid-img" src="{{foto2}}" />
+
+              {{else}}
+              <img class="grid-img" />
+
+              {{/if}}
+              <input id="foto_{{id_producto}}" value="{{foto2}}" hidden=true></input>
+
+            </td>
+            <td>
+                <BR>Imagen nueva</BR>
+            </td>
+          </tr>
+          <tr  style="align:left;">
+            <td style="align-items: left; text-align: left;">
+              <BR>Nota: </BR>
+              <input id="nota" value="{{nota}}"name="nota" style="width:650px; align:center"></input>
+            
+
+            </td>
+
+            <td>
+              <BR>Precio :</BR>
+              <input class="total-price2" id="precio1" name="precio1" value={{precio1}} required></input>
+            </td>
+          </tr>
+          <tr>
+            <td>
+            <!--  <BR>Visible :
+              {{#if visible}}
+              <input type="submit" id="visible"  name="visible" onclick=destildar() style="background-color:green;"class="btn btn-info" />   
+                <!--<input name="visible" id="visible" type="checkbox" checked />  -->             
+            <!-- {{else}}
+              <input type="submit" id="visible"  name="visible"  onclick=tildar() style="background-color: red;"class="btn btn-info"/>
+                <!-- <input name="visible" id="visible" type="checkbox" />--> 
+             <!-- {{/if}}
+                <BR>Visible :--> 
+           <input type="text" align="right" id="visible" name="visible" value={{visible}} hidden=true></input>
+        
+           </td>
+           </tr>
+          <tr>
+        </td>
+        </tr>
+        {{/each}}
+        <tr>
+          <td align="center">
+            <input class="btn btn-primary btn-lg active" role="button" aria-pressed="true" value="Grabar" type="submit"
+              id="boton_grabar"></button>
+          </td>
+          <td align="center">
+            <input class="btn btn-primary btn-lg active" aria-pressed="true" value="Cancelar" type="submit"
+              onclick=cancelar()></input>
+          </td>
+        </tr>
+
+
+
+
+      </table>
+
+    </form>
+
+  </div>
+
+
+
+
+  <script type="text/javascript">
+  
+
+    // console.log("codigo categoria",id_categoria_producto);
+    var cod_cat = document.getElementById("combo_categoria");
+    var cod_subcat = document.getElementById("combo_subcategoria");
+    console.log("cat",cod_cat);
+
+    console.log("subcat",cod_subcat);
+
+    document.getElementById('id_categoria').value = document.getElementById('combo_categoria').value;
+    document.getElementById('id_subcategoria').value = document.getElementById('combo_subcategoria').value;
+    if (cod_cat.addEventListener) {
+      cod_cat.addEventListener("change", cambiar);
+    } else if (cod_cat.attachEvent) {   
+      cod_cat.attachEvent("change", cambiar); 
+    }
+
+   
+
+
+
+    function cambiar() {
+      console.log('entro cambiar');
+      console.log("cod_cat",cod_cat.options[cod_cat.selectedIndex].getAttribute("value"));
+      for (var i = 0; i < cod_subcat.options.length; i++)
+      {
+
+        console.log("cod_subcat",(cod_subcat.options[i].getAttribute("codigo")));
+        if (cod_subcat.options[i].getAttribute("codigo") == cod_cat.options[cod_cat.selectedIndex].getAttribute("value")) {
+          cod_subcat.options[i].style.display = "block";
+          console.log("igual", cod_subcat.options[i].getAttribute("codigo"));
+        } else {
+          cod_subcat.options[i].style.display = "none";
+          console.log("distinto", cod_subcat.options[i].getAttribute("codigo"));
+        }
+      }
+
+      cod_subcat.value = "";
+    }
+
+    function cancelar() {
+      document.getElementById('id_categoria').value = "-1";
+      console.log('cancelar edicion');
+      Swal.fire({
+        title: 'Edicion cancelada ....',
+        text: '',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(function () {
+        window.location = "/productocambia";
+      })
+    };
+
+    $('#combo_categoria').change(function(){
+      console.log('cambio categoria'); 
+      console.log( document.getElementById('combo_categoria').value);
+      document.getElementById('id_categoria').value = document.getElementById('combo_categoria').value;
+      });
+
+     $('#combo_subcategoria').change(function(){
+      console.log('cambio subcategoria'); 
+      console.log( document.getElementById('combo_subcategoria').value);
+       document.getElementById('id_subcategoria').value = document.getElementById('combo_subcategoria').value;
+      });
+
+     $('#tipoventa2').change(function(){
+      console.log('cambio tipo de venta'); 
+      console.log( document.getElementById('tipoventa2').value);
+       document.getElementById('tipoventa').value = document.getElementById('tipoventa2').value;
+      });
+   /*   
+   function destildar() {
+       console.log("destildar");
+       document.getElementById("visible").style.visibility = 0;
+       document.getElementById("visible").style="background-color:red;";
+        location.reload();
+    }
+    
+    function tildar() {
+       console.log("tildar");
+       document.getElementById("visible").style.visibility = 1;
+       document.getElementById("visible").style="background-color:green;";
+        location.reload();
+    }
+     */   
+    //cambiar();
+
+  </script>
+
+
+</body>

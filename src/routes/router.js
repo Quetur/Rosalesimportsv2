@@ -8,6 +8,7 @@ import { promisify } from "util";
 import bcryptjs from "bcryptjs";
 import nodemailer from "nodemailer";
 import { error } from "console";
+import { isAuthenticated } from '../Authenticated.js'; 
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com", // Para pruebas, usa ethereal.email
@@ -119,6 +120,45 @@ router.get("/mailok", async (req, res) => {
 }
 );
 
+router.get("/productocambia", isAuthenticated, async (req, res) => {
+  console.log("router /productocambia", req.session.user.nombre );
+  const [data] = await pool.query(
+    "SELECT *, c.des as cat_des, producto.des as prod_des  FROM producto INNER JOIN categoria c ON c.id_categoria = producto.id_categoria ORDER BY producto.id_categoria,producto.id_subcategoria,producto.orden"
+  );
+  //console.log({ data });
+  res.render("productocambia", { data,
+    title: "Administrar Productos",
+    hideSidebar: true, // <--- Esta variable controla la visibilidad
+    usuario: req.session.user.nombre 
+  });
+});
+
+router.get("/modificarproducto/:id", async (req, res) => {
+  console.log("modificarproducto");
+  const [pro] = await pool.query(
+    "SELECT * FROM producto WHERE id_producto = ?",
+    [req.params.id]
+  );
+
+  const [
+    cat,
+  ] = await pool.query(
+    "SELECT c.id_categoria, c.des, IF(p.id_categoria=c.id_categoria, 'S', '') id_categoria_producto FROM categoria c, producto p where p.id_producto=?",
+    [req.params.id]
+  );
+
+  //const cat = await pool.query("SELECT c.id_categoria, c.des, IF(p.id_categoria=c.id_categoria, 'S', '') id_categoria_producto  FROM categoria c, producto p ");
+
+  const [
+    subcat,
+  ] = await pool.query(
+    "SELECT d.id_categoria, d.id_subcategoria, d.des, IF(p.id_subcategoria=d.id_subcategoria, 'S', '')  id_subcategoria_producto FROM subcategoria d, producto p where p.id_producto=?",
+    [req.params.id]
+  );
+  console.log("subcategoria ", subcat);
+  res.render("modificarproducto", { pro, cat, subcat, title: "Modificar Producto", hideSidebar: true });
+});
+
 router.post("/send-email", async (req, res) => {
   console.log("send email", req.body);
   const {
@@ -157,11 +197,12 @@ router.post("/send-email", async (req, res) => {
       ? desc
           .map(
             (d, i) =>
-              `◆${cant[i]} x ${d} a $${prec[i]} c/u (Subtotal: $${sttl[i]})`
+              `◆${Math.trunc(cant[i])} x ${d} a $${Math.trunc(prec[i])} c/u (Subtotal: $${Math.trunc(sttl[i])})`
           )
           .join("\n")
-      : `◆ ${cant} x ${desc} a $${prec} c/u (Subtotal: $${sttl})`
-  }\n\n*Total del pedido: ${totalgralstr}*\n*N͟o͟t͟a͟:* ${nota}\n\nMuchas Gracias.\n `;
+      : `◆ ${Math.trunc(cant)} x ${desc} a $${Math.trunc(prec)} c/u (Subtotal: $${Math.trunc(sttl)})`
+  }\n\n*Total del pedido: $${Math.trunc(totalgralstr)}*\n*N͟o͟t͟a͟:* ${nota}\n\nMuchas Gracias.`;
+
   // 1. Agregamos await para esperar que la DB devuelva el ID
   const resultId = await grabaWhasbasededatos(
     process.env.CELULAR_ORIGEN,

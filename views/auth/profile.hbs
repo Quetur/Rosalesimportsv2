@@ -48,8 +48,8 @@ ejecutar();
   console.log("mtoken",mtoken)
   if (document.getElementById('token').value) {
     console.log("graba sesion")
-    localStorage.setItem('token_acceso', mtoken);
-    localStorage.setItem("nombre", document.getElementById('nombreusuario').value);
+    sessionStorage.setItem('token_acceso', mtoken);
+    sessionStorage.setItem("nombre", document.getElementById('nombreusuario').value);
     console.log('Token guardado correctamente');
   }
 else {

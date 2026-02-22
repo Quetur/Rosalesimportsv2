@@ -1,0 +1,139 @@
+<div>
+    <script src="https://cdn.tailwindcss.com"></script>
+</div>
+<body>
+  <form id="myform">
+    <div class="container mt-5  my-4" style="width:300px;" align="center">
+      <table>
+        <tr>
+          <td style="width:300px;  align-items: center; text-align: center;">
+            <input style="width:300px;" type="text" name="search" id="search" class="form-control"
+              placeholder="buscar" />
+          </td>
+          <td style="width:300px;  align-items: center; text-align: center;">
+            <input class="btn btn-danger  btn-lg btn-block" onclick=nuevoproducto() type="button"
+              value="agregar producto nuevo"></input>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="d-flex  justify-content-center">
+      <div class="col-md-12 mx-auto">
+        <div class="listaProductos">
+          <table class="table table-striped table-bordered table-hover" id="tabla">
+            <tr>
+              <td>Foto</td>
+              <td>Titulo</td>
+              <td>Descripcion</td>
+              <td>Nota</td>
+              <td>Categoria</td>
+              <td>Precio</td>
+              <td style="text-align:center;" colspan="4">
+                Vi&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspMa&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspAcción
+              </td>
+
+              <tbody>
+                {{#each data}}
+                <tr>
+                  <td>
+                    <div class="relative overflow-hidden rounded-[1.5rem] bg-gray-100 aspect-square mb-6 w-32">
+                      <img src="{{foto2}}" alt="{{des}}"
+                        class="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out" />
+                    </div>
+
+                  </td>
+                  <td>{{titulo}}</td>
+                  <td>{{prod_des}}</td>
+                  <td>{{nota}}</td>
+                  <td>{{cat_des}}</td>
+
+                  <td style="text-align:right;">$&nbsp&nbsp{{precio1}}</td>
+                  <td>
+                    {{#if visible}}
+                    <a id="visible" name="visible" href="/destildar/{{id_producto}}" style="background-color:green;"
+                      class="btn btn-info" />
+                    {{else}}
+                    <a id="visible" name="visible" href="/tildar/{{id_producto}}" style="background-color: red;"
+                      class="btn btn-info" />
+                    {{/if}}
+                  </td>
+                  <td>
+                  </td>
+                  <!--  <td style="text-align:center;"><a href="/verproducto/{{id_producto}}" class="btn btn-info">Ver</a></td>-->
+                  <!--<td style="text-align:center;"><a href="/productoedit/{{id_producto}}"-->
+                  <td style="text-align:center;"><a href="/modificarproducto/{{id_producto}}"
+                      class="btn btn-info">Modificar</a></td>
+                  <td style="text-align:center;"><a href="/productodel/{{id_producto}}" class="btn btn-info">Borrar</a>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!--<div class="overlay"></div>  si sacoesto deja de andar el scrip -->
+
+
+  <script type="text/javascript">
+
+    $(document).ready(function () {
+
+      $('#visible').change(function () {
+        if (this.checked) {
+          console.log('1');
+        } else {
+          console.log('0');
+        }
+      });
+
+      var self = this;
+
+      $('#search').keyup(function () {
+        search_table($(this).val());
+      });
+
+      function search_table(value) {
+
+        $('#tabla tr').each(function () {
+          var found = 'false';
+
+          $(this).each(function () {
+            if ($(this).text().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+              found = 'true';
+            }
+          });
+
+          if (found == 'true') {
+            $(this).show();
+          }
+          else {
+            $(this).hide();
+          }
+
+        });
+      }
+    });
+
+    function nuevoproducto() {
+      console.log("nuevoprouctor");
+      localStorage.clear();
+      console.log('Agregando Nuevo Producto');
+      Swal.fire({
+        title: 'Agregando Nuevo Producto ....',
+        text: '',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(function () {
+        window.location = "productonuevo";
+      })
+      /*  document.getElementById("visible").style.visibility = 0;
+        document.getElementById("visible").style="background-color:red;";
+         location.reload();
+       */
+    }
+
+  </script>
+</body>

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>RosalesImports</title>
+    <link rel="icon" href="/img/logo.png" type="image/png">
 </head>
 <style>
     /* --- Estilos de la Barra Superior (Fondo Blanco) --- */
@@ -87,11 +88,13 @@
         font-size: 1.2rem;
     }
 
-.btn-login {
-    color: #000000; /* Negro puro */
-    text-decoration: none;
-    font-weight: 800; /* Aumentado a 800 para un "bold" más marcado */
-}
+    .btn-login {
+        color: #000000;
+        /* Negro puro */
+        text-decoration: none;
+        font-weight: 800;
+        /* Aumentado a 800 para un "bold" más marcado */
+    }
 
     /* --- ADAPTACIÓN PARA CELULARES (Mobile) --- */
     @media (max-width: 600px) {
@@ -293,7 +296,7 @@
             </a>
 
             <!-- Botones de Acción (Visibilidad controlada por JS/Backend) -->
-            <a href="/admin" id="btnAdmin" class="btn-nav" style="display: none;">Productos</a>
+            <button id="btnAdmin" class="btn-nav" style="display: none;">Administración</a>
             <button id="btnLogout" class="btn-logout" style="display: none;">Cerrar Sesión</button>
             <a href="/signin" id="btnAcceso" class="btn-login">Acceso</a>
         </div>
@@ -333,8 +336,8 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             // --- 1. GESTIÓN DE UI Y AUTENTICACIÓN ---
-            const token = localStorage.getItem('token_acceso');
-            const nombre = localStorage.getItem('nombre');
+            const token = sessionStorage.getItem('token_acceso');
+            const nombre = sessionStorage.getItem('nombre');
 
             const ui = {
                 user: document.getElementById('usuario'),
@@ -402,6 +405,24 @@
             }
         });
 
+        // Escuchar el clic en el botón
+        document.getElementById('btnLogout').addEventListener('click', () => {
+            console.log("pulso el boton btnLogout");
+
+            sessionStorage.removeItem('token_acceso');
+            sessionStorage.removeItem('nombre');
+            window.location.href = '/signin';
+
+
+        });
+
+         document.getElementById('btnAdmin').addEventListener('click', () => {
+            console.log("pulso el boton btnAdmin");
+
+            window.location.href = '/productocambia';
+
+
+        });
     </script>
 
 </body>
