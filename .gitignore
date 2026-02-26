@@ -20,3 +20,17 @@ git status
 git commit -m "actualizacion"
 git branch -M main
 git push -u origin main
+
+
+clonar desde github
+git clone https://github.com/Quetur/Rosalesimportsv2
+
+
+
+// instalar pm2 en la aplicacion
+sudo npm install -g pm2
+pm2 start app.js  # o el nombre de tu archivo principal
+pm2 save
+pm2 startup
+
+// correr pm2 ->   pm2 start app.js --name "rosalesImports"

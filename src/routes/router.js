@@ -10,6 +10,7 @@ import nodemailer from "nodemailer";
 import { error } from "console";
 import { isAuthenticated } from '../Authenticated.js'; 
 
+
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com", // Para pruebas, usa ethereal.email
   port: 587,
@@ -35,9 +36,8 @@ router.get("/signin", (req, res) => {
 });
 
 router.post("/login", async (req, res, next) => {
-  console.log("post /login body:", req.mdni, req.pass); // Log de entrada para diagnóstico inicial
   const { dni, pass } = req.body;
-  console.log("DNI:", dni, "Password:", pass ? "********" : "No proporcionado"); // No mostrar el password real en los logs
+  console.log("Intento de login - DNI:", dni);
 
   // 1. Validación de campos vacíos
   if (!dni || !pass) {
@@ -54,16 +54,12 @@ router.post("/login", async (req, res, next) => {
 
   try {
     // 2. Consulta a la base de datos
-    const [results] = await pool.query("SELECT * FROM usuario WHERE dni = ?", [
-      dni,
-    ]);
+    const [results] = await pool.query("SELECT * FROM usuario WHERE dni = ?", [dni]);
     const user = results[0];
-    console.log("Usuario encontrado:", user ? user.dni : "No encontrado"); // Log para verificar si se encontró el usuario
+
     // 3. Verificación de existencia y password
     if (!user || !(await bcryptjs.compare(pass, user.pass))) {
-      console.log(
-        "Error de autenticación: Usuario no encontrado o contraseña incorrecta"
-      ); // Log específico para fallo de autenticación
+      console.log("Error: Usuario no encontrado o contraseña incorrecta");
       return res.render("auth/signin", {
         alert: true,
         alertTitle: "Error",
@@ -75,35 +71,42 @@ router.post("/login", async (req, res, next) => {
       });
     }
 
-    // 4. Generación de Token
-    console.log("JWT_SECRETO:", process.env.JWT_SECRETO);
-    const token = jwt.sign({ id: user.dni }, process.env.JWT_SECRETO);
-    console.log("Token generado:", token); // Log para verificar la generación del token
-    console.log("Usuario autenticado:", {
+    // 4. GENERACIÓN DE SESIÓN (Crítico para que isAuthenticated funcione)
+    req.session.user = {
       dni: user.dni,
-      nombre: user.nombre,
-      apellido: "",
-      logo: "",
-    }); // Log para confirmar autenticación exitosa
-    // 5. Renderizado de éxito
-    res.render("auth/profile", {
-      alert: true,
-      alertTitle: "Bienvenido",
-      alertMessage: "¡Ingreso exitoso!",
-      alertIcon: "success", // Cambiado de error a success
-      showConfirmButton: true,
-      timer: 2000,
-      ruta: "/",
-      user: user.nombre,
-      userid: dni,
-      apellido: "",
-      logo: "",
-      token, // Shorthand property
-      nombre: user.nombre,
+      nombre: user.nombre
+    };
+
+    // 5. Generación de Token (opcional si ya usas sesiones, pero lo mantenemos)
+    const token = jwt.sign({ id: user.dni }, process.env.JWT_SECRETO);
+
+    // 6. Guardar sesión y responder
+    req.session.save((err) => {
+      if (err) {
+        console.error("Error al guardar sesión:", err);
+        return next(err);
+      }
+
+      console.log("Sesión creada para:", user.nombre);
+
+      res.render("auth/profile", {
+        alert: true,
+        alertTitle: "Bienvenido",
+        alertMessage: "¡Ingreso exitoso!",
+        alertIcon: "success",
+        showConfirmButton: true,
+        timer: 2000,
+        ruta: "productocambia", // Redirigimos a la ruta que querías proteger
+        user: user.nombre,
+        userid: dni,
+        token: token,
+        nombre: user.nombre,
+      });
     });
+
   } catch (error) {
     console.error("Error en el login:", error);
-    next(error); // Pasa el error al middleware de manejo de errores
+    next(error);
   }
 });
 
@@ -556,5 +559,29 @@ async function grabaWhasbasededatos(
     throw error;
   }
 }
+
+router.get("/productocambia", isAuthenticated, async (req, res) => {
+  try {
+    // Verificación de seguridad adicional para evitar errores de lectura
+    const nombreUsuario = req.session?.user?.nombre || "Usuario";
+
+    console.log("Accediendo a /productocambia - Usuario:", nombreUsuario);
+
+    const [data] = await pool.query(
+      "SELECT *, c.des as cat_des, producto.des as prod_des FROM producto INNER JOIN categoria c ON c.id_categoria = producto.id_categoria ORDER BY producto.id_categoria, producto.id_subcategoria, producto.orden"
+    );
+
+    res.render("productocambia", { 
+      data,
+      title: "Administrar Productos",
+      hideSidebar: true, 
+      usuario: nombreUsuario 
+    });
+
+  } catch (error) {
+    console.error("Error en /productocambia:", error);
+    res.status(500).send("Error interno del servidor");
+  }
+});
 
 export default router;
