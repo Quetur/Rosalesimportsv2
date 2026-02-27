@@ -9,7 +9,9 @@ import bcryptjs from "bcryptjs";
 import nodemailer from "nodemailer";
 import { error } from "console";
 import { isAuthenticated } from '../Authenticated.js'; 
+import productoRoutes from "../producto.js"; 
 
+router.use("/", productoRoutes); 
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com", // Para pruebas, usa ethereal.email

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuevo Producto</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Oficial -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com" />
+</head>
+
+<body class="bg-gray-200 p-4 md:p-10 font-sans">
+  <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-300">
+
+    <!-- Header -->
+    <div class="bg-blue-600 px-6 py-4 flex items-center gap-3">
+      <i class="fas fa-plus-circle text-white text-xl"></i>
+      <h2 class="text-white font-bold text-xl tracking-wide">Nuevo Producto</h2>
+    </div>
+
+    <!-- FORMULARIO CORREGIDO CON ENCTYPE -->
+    <form action="/producto_nuevo_graba" method="POST" enctype="multipart/form-data" class="p-8 space-y-6" id="formProducto">
+      
+      <!-- Campos Ocultos -->
+      <div style="display: none;">
+        <input type="hidden" name="tipoventa" value="unidad">
+        <input type="hidden" name="id_subcategoria" value="0">
+        <input type="hidden" name="visible" value="1">
+        <input type="hidden" name="orden" value="1">
+        <input type="hidden" name="unidad" value="1">
+        <input type="hidden" name="porcprecio1" value="1">
+        <input type="hidden" name="porcprecio2" value="1">
+        <input type="hidden" name="fecha" id="fecha_actual">
+        <input type="hidden" name="precio2" value="1">
+        <input type="hidden" name="vermayor" value="1">
+        <input type="hidden" name="descuentoxunidad" value="0">
+        <input type="hidden" name="descuentoapartir" value="0">
+        <input type="hidden" name="cod_barra" value="0">
+      </div>
+
+      <!-- Sección Categoría Principal -->
+      <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-2 tracking-widest">
+          Categoría Principal
+        </label>
+
+        <select name="id_categoria"
+          class="w-full border border-gray-300 p-3 rounded-md bg-white text-gray-700 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          required>
+          <option value="" disabled selected>-- SELECCIONE UNA CATEGORÍA --</option>
+          {{#if cat}}
+            {{#each cat}}
+              <option value="{{id_categoria}}">{{des}}</option>
+            {{/each}}
+          {{else}}
+            <option disabled>No se cargaron categorías</option>
+          {{/if}}
+        </select>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-6">
+        <!-- Columna Izquierda: Imagen -->
+        <div class="w-full md:w-1/2 border border-gray-200 rounded-lg p-4 bg-gray-50 flex flex-col items-center text-center">
+          <label class="block text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">
+            Imagen del Producto
+          </label>
+          
+          <div class="w-full aspect-square bg-gray-200 rounded-lg overflow-hidden border border-gray-300 flex items-center justify-center relative">
+            <img id="img_preview" class="w-full h-full object-cover hidden" alt="Vista previa" />
+            <div id="placeholder" class="flex flex-col items-center text-gray-400">
+              <i class="fas fa-image text-5xl mb-2"></i>
+              <span class="text-xs">Sin imagen</span>
+            </div>
+          </div>
+
+          <!-- Botón disparador del input file -->
+          <button type="button" onclick="document.getElementById('foto2').click()"
+            class="mt-4 text-blue-600 text-xs font-bold hover:underline">
+            <i class="fas fa-upload"></i> Seleccionar imagen
+          </button>
+          
+          <!-- Input file con el name correcto para Multer -->
+          <input type="file" name="foto2" id="foto2" accept="image/*" class="hidden" />
+        </div>
+
+        <!-- Columna Derecha: Datos -->
+        <div class="w-full md:w-1/2 space-y-4">
+          <div>
+            <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Título del Producto</label>
+            <input name="titulo" type="text"
+              class="w-full border border-gray-300 p-3 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Ej: Camiseta de Algodón" required>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Descripción Corta</label>
+            <input name="des" type="text"
+              class="w-full border border-gray-300 p-3 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Detalles del producto" required>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Precio de Venta</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-emerald-600 font-bold">$</span>
+              <input name="precio1" type="number" step="0.01"
+                class="w-full border border-gray-300 pl-8 p-3 rounded-md text-emerald-600 font-bold text-xl" 
+                placeholder="0.00" required>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Nota Interna</label>
+            <textarea name="nota" rows="2"
+              class="w-full border border-gray-300 p-3 rounded-md text-sm resize-none" 
+              placeholder="Notas para administración..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="flex flex-col md:flex-row gap-4 pt-6 border-t border-gray-100">
+        <button type="submit"
+          class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2 transition-transform active:scale-95">
+          <i class="fas fa-save"></i> Grabar Producto
+        </button>
+        <button type="button" onclick="window.location='/productocambia'"
+          class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold py-4 rounded-xl">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Vista previa de la imagen seleccionada
+    document.getElementById('foto2').onchange = function (e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const imgPreview = document.getElementById('img_preview');
+          const placeholder = document.getElementById('placeholder');
+          imgPreview.src = e.target.result;
+          imgPreview.classList.remove('hidden');
+          placeholder.classList.add('hidden');
+        }
+        reader.readAsDataURL(file);
+      }
+    };
+
+    // Generar la fecha de hoy automáticamente
+    document.addEventListener("DOMContentLoaded", function () {
+      const hoy = new Date();
+      const fechaFormateada = hoy.toISOString().split('T')[0]; 
+      document.getElementById('fecha_actual').value = fechaFormateada;
+    });
+  </script>
+</body>
+</html>
