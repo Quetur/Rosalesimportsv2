@@ -8,7 +8,7 @@ import { promisify } from "util";
 import bcryptjs from "bcryptjs";
 import nodemailer from "nodemailer";
 import { error } from "console";
-import { isAuthenticated } from '../Authenticated.js'; 
+import { isAuthenticated } from '../authenticated.js'; 
 import productoRoutes from "../producto.js"; 
 
 router.use("/", productoRoutes); 

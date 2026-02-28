@@ -1,146 +1,142 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Acceso - RosalesImports</title>
-    <link href="https://cdn.jsdelivr.net" rel="stylesheet">
-    <script src="https://code.jquery.com"></script>
-
-<body class="bg-light">
-
+    
+    <!-- 1. CARGAR JQUERY PRIMERO PARA EVITAR EL ERROR "$" IS NOT DEFINED -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
-        /* 1. Contenedor con margen externo garantizado */
-        .main-wrapper {
+        :root {
+            --primary-color: #0d6efd;
+            --primary-hover: #0b5ed7;
+            --bg-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
             min-height: 100vh;
+            margin: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f4f7f6;
-            /* Este padding actúa como el margen exterior del recuadro */
-            padding: 40px 20px;
         }
 
-        /* 2. Recuadro Grande con margen interno (padding) */
         .login-card {
-            width: 100%;
-            max-width: 650px;
-            border: 2px solid #0d6efd;
-            border-radius: 20px;
             background: #ffffff;
+            width: 90%;
+            max-width: 400px;
+            padding: 35px 25px;
+            border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            /* Margen de seguridad para que el contenido no toque el borde azul */
-            padding: 30px;
-            overflow: hidden;
         }
 
-        /* 3. Fuentes pequeñas y estilizadas */
-        .login-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #0d6efd;
-        }
+        .brand-header { text-align: center; margin-bottom: 30px; }
+        .brand-header h1 { color: var(--primary-color); font-weight: 800; font-size: 1.7rem; margin: 0; }
+        .brand-header .divider { width: 40px; height: 3px; background: var(--primary-color); margin: 10px auto; border-radius: 2px; }
+        .brand-header p { color: #6c757d; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
-        .form-label {
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #555;
-        }
+        .form-label { font-size: 0.75rem; font-weight: 700; color: #495057; margin-bottom: 6px; display: block; }
 
-        .form-control-lg {
-            height: 52px;
-            font-size: 0.95rem !important;
-            border-radius: 8px;
+        .input-wrapper { position: relative; margin-bottom: 20px; }
+
+        .form-control-custom {
+            width: 100%;
+            height: 50px;
+            padding: 10px 45px 10px 15px;
+            font-size: 1rem;
+            border-radius: 10px;
             border: 1px solid #ced4da;
-        }
-
-        .btn-lg {
-            height: 52px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        /* Efecto hover para el botón */
-        .btn-lg:hover {
-            background-color: #0b5ed7;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
-        }
-
-        .password-wrapper {
-            position: relative;
+            box-sizing: border-box;
         }
 
         .btn-toggle-eye {
             position: absolute;
-            right: 15px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 1.1rem;
-            border: none;
             background: none;
+            border: none;
             cursor: pointer;
-            color: #bbb;
+            font-size: 1.3rem;
+            z-index: 10;
+            padding: 5px;
         }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            height: 50px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:active { transform: scale(0.98); }
     </style>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
 
-<div class="main-wrapper">
-    <div class="login-card">
-        <div class="text-center mb-5">
-            <h1 class="login-title mb-1">RosalesImports</h1>
-            <div style="width: 50px; height: 3px; background: #0d6efd; margin: 10px auto;"></div>
-            <p class="small text-muted text-uppercase">Acceso al Sistema</p>
-        </div>
+<div class="login-card">
+    <div class="brand-header">
+        <h1>RosalesImports</h1>
+        <div class="divider"></div>
+        <p>Acceso al Sistema</p>
+    </div>
 
-        <form id="formlogin" class="px-md-4" method="post" action="/login">
-            <!-- SE AGREGARON IDS: dni y mdni -->
-            <div class="mb-4">
-                <label class="form-label">Usuario / DNI</label>
-                <input type="text" id="dni" name="dni" class="form-control form-control-lg" placeholder="Ingrese su identificación" autocomplete="off">
+    <form id="formlogin" method="post" action="/login">
+        <div class="mb-3">
+            <label class="form-label">USUARIO / DNI</label>
+            <div class="input-wrapper">
+                <input type="text" id="dni" name="dni" class="form-control-custom" placeholder="Ingrese su identificación" autocomplete="off" inputmode="numeric">
                 <input type="hidden" id="mdni">
             </div>
+        </div>
 
-            <!-- SE AGREGARON IDS: pass y btn-toggle -->
-            <div class="mb-5">
-                <label class="form-label">Contraseña</label>
-                <div class="password-wrapper">
-                    <input type="password" id="pass" name="pass" class="form-control form-control-lg" placeholder="••••••••">
-                    <button type="button" id="btn-toggle" class="btn-toggle-eye">
-                        👁️
-                    </button>
-                </div>
+        <div class="mb-4">
+            <label class="form-label">CONTRASEÑA</label>
+            <div class="input-wrapper">
+                <input type="password" id="pass" name="pass" class="form-control-custom" placeholder="••••••••">
+                <button type="button" id="btn-toggle" class="btn-toggle-eye">👁️</button>
             </div>
+        </div>
 
-            <button type="button" class="w-100 btn btn-lg btn-primary mb-3" onclick="ingresar()">
-                INGRESAR
-            </button>
-        </form>
-    </div>
+        <button type="button" id="btn-ingresar" class="btn-submit" onclick="ingresar()">
+            INGRESAR
+        </button>
+    </form>
 </div>
 
 <script>
+    // Aseguramos que el código solo corra cuando jQuery esté listo
     $(document).ready(function () {
-        // Manejo de alertas del servidor
+        
+        // Alerta del servidor
         if ("{{alert}}" === "true") {
-            Swal.fire({ icon: 'error', title: 'USUARIO INCORRECTO', timer: 5000, showConfirmButton: false });
+            Swal.fire({ icon: 'error', title: 'USUARIO INCORRECTO', timer: 3000, showConfirmButton: false });
         }
 
         // Formateo de DNI
-        $("#dni").on("keyup", function () {
+        $("#dni").on("input", function () {
             let val = $(this).val().replace(/\D/g, "");
-            $("#mdni").val(val); // Guarda el valor limpio para el servidor
+            $("#mdni").val(val); 
             $(this).val(val.replace(/\B(?=(\d{3})+(?!\d))/g, "."));
         });
 
-        // Toggle de contraseña
-        $('#btn-toggle').on('click', function () {
+        // Ver contraseña corregido para móvil
+        $('#btn-toggle').on('click touchend', function(e) {
+            e.preventDefault();
             const input = $('#pass');
             const isPass = input.attr('type') === 'password';
             input.attr('type', isPass ? 'text' : 'password');
@@ -148,22 +144,32 @@
         });
     });
 
+    // Función global para que el onclick la encuentre siempre
     function ingresar() {
-        // Ahora sí encuentra los IDs
-        if ($("#mdni").val().length === 0) {
+        // Verificamos si jQuery cargó antes de usarlo
+        if (typeof $ === 'undefined') {
+            alert("Cargando sistema, por favor espere un segundo...");
+            return;
+        }
+
+        const dniRaw = $("#mdni").val();
+        const passVal = $("#pass").val();
+
+        if (!dniRaw || dniRaw.length === 0) {
             Swal.fire({ icon: 'error', title: 'DNI Requerido', timer: 1500, showConfirmButton: false });
             $("#dni").focus();
             return;
         }
-        if ($("#pass").val().length === 0) {
+        if (!passVal || passVal.length === 0) {
             Swal.fire({ icon: 'error', title: 'Contraseña Requerida', timer: 1500, showConfirmButton: false });
             $("#pass").focus();
             return;
         }
-        console.log("Formulario válido, enviando...");
-        document.getElementById("formlogin").submit();
+
+        $("#btn-ingresar").prop("disabled", true).text("ENTRANDO...");
+        $("#formlogin").submit();
     }
 </script>
-</body>
 
+</body>
 </html>

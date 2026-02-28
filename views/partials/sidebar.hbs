@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const group = document.querySelector('.checkbox-group');
     const checkboxes = group.querySelectorAll('input[type="checkbox"]');
     const form = document.querySelector('.filter-form'); // Referencia al formulario
-
+    console.log("Checkboxes encontrados:", form);  
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             if (this.checked) {

@@ -31,6 +31,24 @@ const upload = multer({
   }),
 });
 
+router.get('/productos', async (req, res) => {
+    try {
+        const { f1, f2, f3, f4 } = req.query;
+        let sql = "SELECT * FROM producto WHERE 1=1";
+        const params = [];
+
+        if (f1) { sql += " AND id_categoria = ?"; params.push('10'); }
+        if (f2) { sql += " AND id_categoria = ?"; params.push('20'); }
+        if (f3) { sql += " AND id_categoria = ?"; params.push('30'); }
+        if (f4) { sql += " AND id_categoria = ?"; params.push('40'); }
+        
+        const [rows] = await pool.execute(sql, params);
+        res.render('home', { productos: rows, filtros: req.query });
+    } catch (err) {
+        res.status(500).send(`Error: ${err.message}`);
+    }
+});
+
 router.post("/productomodi/:id", async (req, res) => {
     try {
         console.log("/productomodi/", req.params.id, req.body);
@@ -113,6 +131,32 @@ router.get("/productodel/:id", async (req, res) => {
   
   const [data] = await pool.query(
     "SELECT *, c.des as cat_des, producto.des as prod_des FROM producto INNER JOIN categoria c ON c.id_categoria = producto.id_categoria ORDER BY producto.id_categoria,producto.id_subcategoria,producto.orden"
+  );
+  res.render("productocambia", { data });
+});
+
+router.get("/tildar/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log("tildar");
+  const pro = await pool.query(
+    "update producto set visible=1 where id_producto = ?",
+    [id]
+  );
+  const [data] = await pool.query(
+    "SELECT *, c.des as cat_des, producto.des as prod_des  FROM producto INNER JOIN categoria c ON c.id_categoria = producto.id_categoria ORDER BY producto.id_categoria,producto.id_subcategoria,producto.orden"
+  );
+  res.render("productocambia", { data });
+});
+
+router.get("/destildar/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log("destildar");
+  const pro = await pool.query(
+    "update producto set visible=0 where id_producto = ?",
+    [id]
+  );
+  const [data] = await pool.query(
+    "SELECT *, c.des as cat_des, producto.des as prod_des  FROM producto INNER JOIN categoria c ON c.id_categoria = producto.id_categoria ORDER BY producto.id_categoria,producto.id_subcategoria,producto.orden"
   );
   res.render("productocambia", { data });
 });

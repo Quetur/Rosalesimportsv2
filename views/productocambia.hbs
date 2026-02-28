@@ -78,16 +78,17 @@
                 <span class="font-black text-emerald-600">${{precio1}}</span>
               </td>
               <td class="px-6 py-4 text-center">
-                {{#if visible}}
-                  <span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    <span class="w-1.5 h-1.5 rounded-full bg-green-600"></span> Visible
-                  </span>
-                {{else}}
-                  <span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                    <span class="w-1.5 h-1.5 rounded-full bg-red-600"></span> Oculto
-                  </span>
-                {{/if}}
-              </td>
+  {{#if visible}}
+    <a href="/destildar/{{id_producto}}" class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-green-100 text-green-800 hover:bg-green-200 transition-colors">
+      <span class="w-1.5 h-1.5 rounded-full bg-green-600"></span> Visible
+    </a>
+  {{else}}
+    <a href="/tildar/{{id_producto}}" class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-red-100 text-red-800 hover:bg-red-200 transition-colors">
+      <span class="w-1.5 h-1.5 rounded-full bg-red-600"></span> Oculto
+    </a>
+  {{/if}}
+</td>
+
               <td class="px-6 py-4 text-center">
                 <div class="flex justify-center gap-3">
                   <a href="/modificarproducto/{{id_producto}}" 
