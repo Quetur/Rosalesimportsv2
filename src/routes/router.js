@@ -10,8 +10,10 @@ import nodemailer from "nodemailer";
 import { error } from "console";
 import { isAuthenticated } from '../authenticated.js'; 
 import productoRoutes from "../producto.js"; 
+import categoriaRoutes from "../categoria.js"; 
 
 router.use("/", productoRoutes); 
+router.use("/", categoriaRoutes);
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com", // Para pruebas, usa ethereal.email
@@ -125,6 +127,7 @@ router.get("/mailok", async (req, res) => {
 }
 );
 
+
 router.get("/productocambia", isAuthenticated, async (req, res) => {
   console.log("router /productocambia", req.session.user.nombre );
   const [data] = await pool.query(
@@ -137,6 +140,9 @@ router.get("/productocambia", isAuthenticated, async (req, res) => {
     usuario: req.session.user.nombre 
   });
 });
+
+
+
 
 router.get("/modificarproducto/:id", async (req, res) => {
   console.log("modificarproducto");
@@ -195,6 +201,7 @@ router.post("/send-email", async (req, res) => {
   if (sucursal && sucursal.trim() !== "") {
     direccionCompleta = `${direccion}, Sucursal: ${sucursal}`;
   }
+  console.log("total general string: ", totalgralstr);
   console.log("Datos : ", datos);
   // graba en la base de datos el mensaje de whatsapp
   const mensajeWhatsapp = `Hola *${cliente}*, hemos recibido tu pedido, generado a traves de nuestra pagina web, se te enviara un mail a ${correo} con mas Información.\nNos estaremos comunicando con vos a este celular dentro de las próximas 48 horas habliles.\nLos datos de tu pedido del dia ${fecha} a las ${horalocal}, son los Siguientes:\nD͟i͟r͟e͟c͟c͟i͟o͟n͟: *${direccionCompleta}, ${localidad}*\nD̲e̲t̲a̲l̲l̲e̲:\n${
@@ -202,12 +209,12 @@ router.post("/send-email", async (req, res) => {
       ? desc
           .map(
             (d, i) =>
-              `◆${Math.trunc(cant[i])} x ${d} a $${Math.trunc(prec[i])} c/u (Subtotal: $${Math.trunc(sttl[i])})`
+              `◆${Math.trunc(cant[i])} x ${d} a $${Math.trunc(prec[i])} c/u => $${Math.trunc(sttl[i])}`
           )
           .join("\n")
-      : `◆ ${Math.trunc(cant)} x ${desc} a $${Math.trunc(prec)} c/u (Subtotal: $${Math.trunc(sttl)})`
-  }\n\n*Total del pedido: $${Math.trunc(totalgralstr)}*\n*N͟o͟t͟a͟:* ${nota}\n\nMuchas Gracias.`;
-
+      : `◆ ${Math.trunc(cant)} x ${desc} a $${Math.trunc(prec)} c/u => $${Math.trunc(sttl)}`
+  }\n\n*Total del pedido: ${totalgralstr}*\n *N͟o͟t͟a͟:* ${nota}\n\nMuchas Gracias.`;
+  console.log(mensajeWhatsapp)
   // 1. Agregamos await para esperar que la DB devuelva el ID
   const resultId = await grabaWhasbasededatos(
     process.env.CELULAR_ORIGEN,

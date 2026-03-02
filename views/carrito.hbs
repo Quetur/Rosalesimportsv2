@@ -60,19 +60,21 @@
 
     .form-control,
     .form-select {
-       background-color: #e3f2fd !important; /* Un celeste suave */
-    border-color: #bbdefb; /* Opcional: borde a juego */
-     
+      background-color: #e3f2fd !important;
+      /* Un celeste suave */
+      border-color: #bbdefb;
+      /* Opcional: borde a juego */
+
       padding: 12px 15px;
       border-radius: 10px;
       transition: all 0.3s;
     }
 
-/* Mantiene el fondo celeste incluso cuando el usuario escribe */
-.form-control:focus {
-    background-color: #e3f2fd;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
+    /* Mantiene el fondo celeste incluso cuando el usuario escribe */
+    .form-control:focus {
+      background-color: #e3f2fd;
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
 
     .table thead th {
       background-color: #f8f9fa;
@@ -138,6 +140,26 @@
         border: 0;
       }
     }
+
+    /* Estilo para el spinner */
+    .spinner {
+      width: 25px !important;
+      height: 25px !important;
+      border: 4px solid rgba(255, 255, 255, 0.3) !important;
+      border-radius: 50% !important;
+      border-top-color: #fff !important;
+      animation: spin 0.8s linear infinite !important;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 
   <main class="checkout-container" class="content {{#if hideSidebar}}full-width{{else}}full-width expanded{{/if}}">
@@ -194,8 +216,8 @@
 
             <div class="col-12">
               <label class="form-label fw-semibold">Sucursal de correo para entregar el pedido</label>
-              <input type="text" class="form-control" name="sucursal" id="sucursal" placeholder="si lo desea indique sucursal de correo para entregar su pedido"
-                required>
+              <input type="text" class="form-control" name="sucursal" id="sucursal"
+                placeholder="si lo desea indique sucursal de correo para entregar su pedido" required>
             </div>
 
             <!-- Notas -->
@@ -280,11 +302,15 @@
         </td>
         <td style="width: 50%;">
           <!-- BOTÓN VERDE -->
-          <button type="submit" class="btn btn-lg w-100 btn-process" onclick="validar()" name="boton-procesar"
-            id="boton-procesar"
-            style="background-color: #145c32 !important; color: white !important; border: none; border-radius: 10px; font-weight: bold; font-size: 1.4rem; padding: 12px 0;">
-            &nbspConfirmar y Realizar Pedido
+          <button type="submit" class="btn btn-lg w-100 btn-process" onclick="procesarPedido(event)"
+            name="boton-procesar" id="boton-procesar"
+            style="background-color: #145c32 !important; color: white !important; border: none; border-radius: 10px; font-weight: bold; font-size: 1.4rem; padding: 12px 0; display: flex; align-items: center; justify-content: center;">
+
+            <div id="spinner-loader" class="spinner" style="display: none; margin-right: 15px;"></div>
+            <span id="btn-text">Confirmar y Realizar Pedido</span>
           </button>
+
+
         </td>
       </tr>
     </table>
@@ -747,7 +773,7 @@
 
 
 
-           document.getElementById("procesar-datos").submit();
+        document.getElementById("procesar-datos").submit();
       }
     }
 
@@ -766,6 +792,31 @@
       field = document.querySelector('#horalocal');
       field.value = hora;
       console.log("hora :", hora);
+    }
+    function procesarPedido(event) {
+      const btn = document.getElementById('boton-procesar');
+      const spinner = document.getElementById('spinner-loader');
+      const btnText = document.getElementById('btn-text');
+
+      // Muestra el spinner inmediatamente al hacer clic
+      spinner.style.setProperty('display', 'inline-block', 'important');
+      btnText.innerText = 'Procesando...';
+      btn.style.opacity = "0.7";
+      btn.style.pointerEvents = "none"; // Evita doble clic
+
+      // Si tu función validar() existe y falla, frenamos todo
+      if (typeof validar === "function" && !validar()) {
+        event.preventDefault();
+        // Resetear si hay error de validación
+        spinner.style.display = 'none';
+        btnText.innerText = 'Confirmar y Realizar Pedido';
+        btn.style.pointerEvents = "auto";
+        btn.style.opacity = "1";
+        return false;
+      }
+
+      // Si llegamos acá, el formulario sigue su curso al action="/send-email"
+      return true;
     }
 
 

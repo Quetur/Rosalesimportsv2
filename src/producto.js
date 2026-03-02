@@ -3,6 +3,7 @@ import pool from "../db.js";
 import { S3Client } from "@aws-sdk/client-s3";
 import multer from "multer";
 import multerS3 from "multer-s3";
+import { isAuthenticated } from "./authenticated.js";
 
 const router = express.Router();
 
@@ -49,7 +50,7 @@ router.get('/productos', async (req, res) => {
     }
 });
 
-router.post("/productomodi/:id", async (req, res) => {
+router.post("/productomodi/:id", isAuthenticated, async (req, res) => {
     try {
         console.log("/productomodi/", req.params.id, req.body);
         const { id } = req.params;
@@ -82,14 +83,14 @@ router.post("/productomodi/:id", async (req, res) => {
     }
 });
 
-router.get("/productonuevo", async (req, res) => {
+router.get("/productonuevo", isAuthenticated, async (req, res) => {
   console.log("productonuevo");
   const [cat] = await pool.query("SELECT c.id_categoria, c.des FROM categoria c");
   res.render("productonuevo", { cat });
 });
 
 // RUTA CORREGIDA: Agregado middleware upload.single("foto2")
-router.post("/producto_nuevo_graba", upload.single("foto2"), async (req, res) => {
+router.post("/producto_nuevo_graba", isAuthenticated, upload.single("foto2"), async (req, res) => {
   try {
     console.dir(req.body);
     console.log("producto_nuevo_graba");
@@ -124,7 +125,8 @@ router.post("/producto_nuevo_graba", upload.single("foto2"), async (req, res) =>
   }
 });
 
-router.get("/productodel/:id", async (req, res) => {
+// Eliminar Producto
+router.get("/productodel/:id", isAuthenticated, async (req, res) => {
   const { id } = req.params;
   console.log("delete", id);
   await pool.query("DELETE FROM producto WHERE id_producto = ?", [id]);
@@ -135,7 +137,8 @@ router.get("/productodel/:id", async (req, res) => {
   res.render("productocambia", { data });
 });
 
-router.get("/tildar/:id", async (req, res) => {
+// Cambiar estado a Visible
+router.get("/tildar/:id", isAuthenticated, async (req, res) => {
   const { id } = req.params;
   console.log("tildar");
   const pro = await pool.query(
@@ -148,7 +151,8 @@ router.get("/tildar/:id", async (req, res) => {
   res.render("productocambia", { data });
 });
 
-router.get("/destildar/:id", async (req, res) => {
+// Cambiar estado a Oculto
+router.get("/destildar/:id", isAuthenticated, async (req, res) => {
   const { id } = req.params;
   console.log("destildar");
   const pro = await pool.query(

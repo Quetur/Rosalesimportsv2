@@ -4,6 +4,7 @@ README.md
 docs
 .env
 keys.js
+.gitignore
 
 primera vez
 echo "# Rosalesimportsv2" >> README.md
