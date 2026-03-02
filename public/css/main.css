@@ -1,0 +1,273 @@
+/* --- RESET Y BASE --- */
+body {
+    margin: 0;
+    padding-top: 70px; /* Evita que el contenido se solape con la barra fija */
+    font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+    background-color: #f8fafc;
+}
+
+/* --- BARRA SUPERIOR FIJA (ESTABLE) --- */
+.top-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 0 30px;
+    height: 70px;
+    width: 100%;
+    position: fixed; /* Fix para que no se mueva al centro */
+    top: 0;
+    left: 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #e2e8f0;
+    box-sizing: border-box;
+    z-index: 2000;
+}
+
+.nav-left a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.nav-logo {
+    width: 42px;
+    height: auto;
+    margin-right: 12px;
+    border-radius: 8px;
+}
+
+.brand-name {
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.025em;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
+/* --- SOLUCIÓN DEFINITIVA: ICONO CARRITO --- */
+/* --- FORZADO MANUAL DEL ICONO --- */
+.cart-link i::before {
+    display: inline-block !important;
+    content: "\f07a" !important; /* Este es el código del dibujo del carrito */
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    font-size: 26px !important;
+    color: #1e293b !important;
+    text-decoration: none !important;
+}
+
+/* Si el rectángulo tiene bordes negros, los quitamos aquí */
+.cart-link i {
+    border: none !important;
+    outline: none !important;
+    display: inline-block !important;
+    width: 26px;
+    height: 26px;
+}
+
+.cart-count {
+    position: absolute;
+    top: 0;
+    right: -2px;
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    font-size: 10px;
+    font-weight: 700;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* --- BOTONES PREMIUM (AZUL DEGRADADO + CÁPSULA) --- */
+.nav-btn-professional {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
+    color: #ffffff !important;
+    padding: 0 24px;
+    height: 42px;
+    border-radius: 50px; /* Bordes redondos profesionales */
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+    white-space: nowrap;
+}
+
+.nav-btn-professional:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(37, 99, 235, 0.4);
+}
+
+/* --- MENÚ DESPLEGABLE (DROPDOWN MODERNO) --- */
+.admin-menu-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#menu-toggle {
+    display: none;
+}
+
+.admin-dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    background-color: #ffffff;
+    min-width: 200px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #f1f5f9;
+    z-index: 2100;
+    display: none;
+    padding: 6px 0;
+}
+
+#menu-toggle:checked ~ .admin-dropdown {
+    display: block;
+    animation: fadeInScale 0.2s ease-out;
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.admin-dropdown li a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.admin-dropdown li a:hover {
+    background-color: #f8fafc;
+    color: #2563eb;
+    padding-left: 24px;
+}
+
+.menu-divider {
+    height: 1px;
+    background-color: #f1f5f9;
+    margin: 6px 0;
+}
+
+/* --- ADAPTACIÓN MÓVIL --- */
+@media (max-width: 600px) {
+    .top-navbar { padding: 0 15px; }
+    
+    .nav-btn-professional {
+        padding: 0 14px;
+        height: 36px;
+        font-size: 11px;
+    }
+
+    .user-name-text {
+        max-width: 80px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+/* --- Estilos para el Icono SVG --- */
+.cart-icon-svg {
+    width: 30px;      /* Tamaño del icono */
+    height: 30px;
+    fill: #1e293b;    /* Color Gris Oxford Profundo */
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+.cart-link:hover .cart-icon-svg {
+    transform: scale(1.1);
+    fill: #2563eb;    /* Cambia a azul al pasar el mouse */
+}
+
+.cart-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+/* El contador se mantiene igual */
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -12px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #fff;
+}
+/* --- CARRITO MÁS GRANDE Y LEGIBLE --- */
+.cart-icon-svg {
+    width: 35px;      /* Aumentado de 30px a 35px */
+    height: 35px;
+    fill: #1e293b;    
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+.cart-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    margin-right: 25px; /* Más espacio para el contador más grande */
+}
+
+/* --- CONTADOR MÁS GRANDE --- */
+.cart-count {
+    position: absolute;
+    top: -10px;       /* Ajustado para el nuevo tamaño */
+    right: -15px;     /* Ajustado para el nuevo tamaño */
+    background-color: #ef4444;
+    color: #ffffff !important;
+    font-size: 13px;  /* Aumentado de 11px a 13px */
+    font-weight: 800; /* Más negrita para resaltar */
+    height: 24px;     /* Aumentado de 18px a 24px */
+    width: 24px;      /* Aumentado de 18px a 24px */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2.5px solid #ffffff; /* Borde un poco más grueso */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}

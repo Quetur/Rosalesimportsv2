@@ -84,7 +84,7 @@ router.post("/login", async (req, res, next) => {
     // 5. Generación de Token (opcional si ya usas sesiones, pero lo mantenemos)
     const token = jwt.sign({ id: user.dni }, process.env.JWT_SECRETO);
 
-    // 6. Guardar sesión y responder
+      // 6. Guardar sesión y responder
     req.session.save((err) => {
       if (err) {
         console.error("Error al guardar sesión:", err);
@@ -93,6 +93,10 @@ router.post("/login", async (req, res, next) => {
 
       console.log("Sesión creada para:", user.nombre);
 
+      // --- AGREGA ESTA LÍNEA AQUÍ PARA GUARDAR LA COOKIE ---
+      res.cookie('token_acceso', token, { httpOnly: false, secure: false, maxAge: 3600000 }); 
+      // ----------------------------------------------------
+
       res.render("auth/profile", {
         alert: true,
         alertTitle: "Bienvenido",
@@ -100,7 +104,7 @@ router.post("/login", async (req, res, next) => {
         alertIcon: "success",
         showConfirmButton: true,
         timer: 2000,
-        ruta: "productocambia", // Redirigimos a la ruta que querías proteger
+        ruta: "productocambia", 
         user: user.nombre,
         userid: dni,
         token: token,
